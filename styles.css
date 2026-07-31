@@ -608,7 +608,7 @@ input, select, textarea {
 /* ========== INFO ROW ========== */
 .info-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     margin-bottom: 32px;
 }
@@ -619,6 +619,32 @@ input, select, textarea {
     padding: 24px;
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
+}
+
+.card-icon {
+    color: var(--primary);
+    margin-right: 8px;
+    font-size: 0.9rem;
+}
+
+/* Fund Allocation */
+.allocation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.allocation-item .progress-header {
+    margin-bottom: 6px;
+}
+
+.allocation-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
 }
 
 .view-all {
@@ -1756,6 +1782,7 @@ input, select, textarea {
 @media (max-width: 1200px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .charts-row { grid-template-columns: 1fr; }
+    .info-row { grid-template-columns: 1fr; }
     .programs-grid { grid-template-columns: repeat(2, 1fr); }
     .events-grid { grid-template-columns: repeat(2, 1fr); }
     .team-grid { grid-template-columns: repeat(2, 1fr); }

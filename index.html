@@ -135,7 +135,7 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon" style="background: #eef2ff; color: #4f46e5;">
-                        <i class="fas fa-dollar-sign"></i>
+                        <i class="fas fa-rupee-sign"></i>
                     </div>
                     <div class="stat-info">
                         <h3>₹2,48,500</h3>
@@ -175,29 +175,50 @@
                 </div>
             </div>
 
-            <!-- Charts Row -->
-            <div class="charts-row">
-                <div class="chart-card large">
-                    <div class="card-header">
-                        <h3>Donation Overview</h3>
-                        <div class="chart-filter">
-                            <button class="filter-btn active" data-range="monthly">Monthly</button>
-                            <button class="filter-btn" data-range="weekly">Weekly</button>
-                            <button class="filter-btn" data-range="yearly">Yearly</button>
-                        </div>
-                    </div>
-                    <div class="chart-wrapper"><canvas id="donationChart"></canvas></div>
-                </div>
-                <div class="chart-card">
-                    <div class="card-header">
-                        <h3>Fund Allocation</h3>
-                    </div>
-                    <div class="chart-wrapper"><canvas id="allocationChart"></canvas></div>
-                </div>
-            </div>
-
             <!-- Recent Activity & Upcoming Events -->
             <div class="info-row">
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-pie-chart card-icon"></i> Fund Allocation</h3>
+                    </div>
+                    <div class="allocation-list">
+                        <div class="allocation-item">
+                            <div class="progress-header">
+                                <span><span class="allocation-dot" style="background:#4f46e5;"></span> Education</span>
+                                <span>35% · ₹86,975</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:35%; background:linear-gradient(90deg,#4f46e5,#818cf8);"></div></div>
+                        </div>
+                        <div class="allocation-item">
+                            <div class="progress-header">
+                                <span><span class="allocation-dot" style="background:#16a34a;"></span> Healthcare</span>
+                                <span>25% · ₹62,125</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:25%; background:linear-gradient(90deg,#16a34a,#4ade80);"></div></div>
+                        </div>
+                        <div class="allocation-item">
+                            <div class="progress-header">
+                                <span><span class="allocation-dot" style="background:#d97706;"></span> Environment</span>
+                                <span>20% · ₹49,700</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:20%; background:linear-gradient(90deg,#d97706,#fbbf24);"></div></div>
+                        </div>
+                        <div class="allocation-item">
+                            <div class="progress-header">
+                                <span><span class="allocation-dot" style="background:#db2777;"></span> Community</span>
+                                <span>15% · ₹37,275</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:15%; background:linear-gradient(90deg,#db2777,#f472b6);"></div></div>
+                        </div>
+                        <div class="allocation-item">
+                            <div class="progress-header">
+                                <span><span class="allocation-dot" style="background:#94a3b8;"></span> Administration</span>
+                                <span>5% · ₹12,425</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:5%; background:linear-gradient(90deg,#94a3b8,#cbd5e1);"></div></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="info-card">
                     <div class="card-header">
                         <h3>Recent Donations</h3>
@@ -1215,7 +1236,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Donation Amount ($)</label>
+                            <label>Donation Amount (₹)</label>
                             <input type="number" placeholder="0.00" required>
                         </div>
                         <div class="form-group">
@@ -1289,7 +1310,7 @@
                             <input type="number" placeholder="0">
                         </div>
                         <div class="form-group">
-                            <label>Budget ($)</label>
+                            <label>Budget (₹)</label>
                             <input type="number" placeholder="0.00">
                         </div>
                     </div>
@@ -1335,7 +1356,7 @@
                             <input type="text" placeholder="e.g., Kenya, India">
                         </div>
                         <div class="form-group">
-                            <label>Budget ($)</label>
+                            <label>Budget (₹)</label>
                             <input type="number" placeholder="0.00">
                         </div>
                     </div>
@@ -1477,7 +1498,6 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
