@@ -229,11 +229,18 @@ function closeModal(id) {
 }
 
 /* ========== FORMS ========== */
+let editingDonorRow = null;
+
 function initForms() {
     document.querySelectorAll('form').forEach(form => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const formId = form.id;
+
+            if (formId === 'addDonorForm') {
+                handleDonorFormSubmit();
+                return;
+            }
 
             const modal = form.closest('.modal-overlay');
             if (modal) {
@@ -241,7 +248,6 @@ function initForms() {
             }
 
             const messages = {
-                addDonorForm: 'Donor added successfully!',
                 addEventForm: 'Event created successfully!',
                 addProgramForm: 'Program added successfully!',
                 addTeamForm: 'Team member added successfully!',
@@ -253,6 +259,90 @@ function initForms() {
             form.reset();
         });
     });
+}
+
+function handleDonorFormSubmit() {
+    const firstName = document.getElementById('donorFirstName').value.trim();
+    const lastName = document.getElementById('donorLastName').value.trim();
+    const mobile = document.getElementById('donorPhone').value.trim();
+    const amount = document.getElementById('donorAmount').value.trim();
+    const type = document.getElementById('donorType').value;
+    const program = document.getElementById('donorProgram').value;
+    const status = document.getElementById('donorStatus').value;
+    const notes = document.getElementById('donorNotes').value.trim();
+
+    const fullName = (firstName + ' ' + lastName).trim();
+    const amountINR = '₹' + Number(amount).toLocaleString('en-IN');
+
+    const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(fullName) + '&background=4f46e5&color=fff';
+
+    const statusClass = status === 'Pending' ? 'pending' : 'completed';
+    const typeClass = type.toLowerCase().replace(/\s+/g, '-');
+    const today = new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+
+    if (editingDonorRow) {
+        // Update existing row
+        const row = editingDonorRow;
+        row.querySelector('.donor-cell img').src = avatar;
+        row.querySelector('.donor-cell img').alt = fullName;
+        row.querySelector('.donor-cell span').textContent = fullName;
+        row.cells[2].textContent = mobile;
+        row.querySelector('.amount').textContent = amountINR;
+        const typeBadge = row.querySelector('.badge-pill');
+        typeBadge.className = 'badge-pill ' + typeClass;
+        typeBadge.textContent = type;
+        row.dataset.program = program;
+        row.dataset.notes = notes;
+
+        showToast(`${fullName} updated successfully!`, 'success');
+        editingDonorRow = null;
+        document.getElementById('donorSubmitBtn').textContent = 'Add Donor';
+        document.querySelector('#addDonorModal .modal-header h3').textContent = 'Add New Donor';
+    } else {
+        // Append new row
+        const table = document.querySelector('#donorTable tbody');
+        const tr = document.createElement('tr');
+        tr.dataset.program = program;
+        tr.dataset.notes = notes;
+        tr.innerHTML = `
+            <td><input type="checkbox" class="row-check"></td>
+            <td>
+                <div class="donor-cell">
+                    <img src="${avatar}" alt="">
+                    <span>${fullName}</span>
+                </div>
+            </td>
+            <td>${mobile}</td>
+            <td class="amount">${amountINR}</td>
+            <td><span class="badge-pill ${typeClass}">${type}</span></td>
+            <td>${today}</td>
+            <td><span class="badge-pill ${statusClass}">${status}</span></td>
+            <td>
+                <div class="action-btns">
+                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                </div>
+            </td>
+        `;
+        table.appendChild(tr);
+
+        // Update pagination count
+        const pagination = document.querySelector('.table-pagination span');
+        if (pagination) {
+            const match = pagination.textContent.match(/of (\d+)/);
+            if (match) {
+                pagination.textContent = pagination.textContent.replace(match[1], (parseInt(match[1]) + 1));
+            }
+        }
+
+        bindRowActions(tr.querySelectorAll('.action-btn'));
+
+        showToast(`${fullName} added successfully!`, 'success');
+    }
+
+    document.getElementById('addDonorForm').reset();
+    closeModal('addDonorModal');
 }
 
 /* ========== SEARCH ========== */
@@ -432,27 +522,114 @@ function initTableFeatures() {
     }
 
     // Action buttons
-    document.querySelectorAll('.action-btn').forEach(btn => {
+    bindRowActions(document.querySelectorAll('.action-btn'));
+}
+
+function getDonorRowData(row) {
+    const name = row.querySelector('.donor-cell span')?.textContent?.trim() || '';
+    const mobile = row.cells[2]?.textContent?.trim() || '';
+    const amount = row.querySelector('.amount')?.textContent?.trim() || '₹0';
+    const typeBadge = row.querySelector('.badge-pill');
+    const type = typeBadge?.textContent?.trim() || '';
+    const date = row.cells[5]?.textContent?.trim() || '';
+    const status = row.cells[6]?.textContent?.trim() || '';
+    const avatar = row.querySelector('.donor-cell img')?.src || '';
+    const program = row.dataset.program || 'General Fund';
+    const notes = row.dataset.notes || 'No notes available.';
+
+    return { name, mobile, amount, type, date, status, avatar, program, notes };
+}
+
+function bindRowActions(buttons) {
+    buttons.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const icon = btn.querySelector('i');
             const row = btn.closest('tr');
-            const name = row.querySelector('.donor-cell span')?.textContent || row.querySelector('.donor-cell')?.textContent?.trim();
+            if (!row) return;
 
             if (icon.classList.contains('fa-trash')) {
-                if (confirm(`Are you sure you want to delete ${name || 'this record'}?`)) {
-                    row.style.opacity = '0';
-                    row.style.transform = 'translateX(-20px)';
-                    setTimeout(() => row.remove(), 300);
-                    showToast(`${name || 'Record'} deleted`, 'success');
-                }
+                handleDeleteDonor(row);
             } else if (icon.classList.contains('fa-eye')) {
-                showToast(`Viewing ${name || 'record'} details`, 'info');
+                handleViewDonor(row);
             } else if (icon.classList.contains('fa-pen')) {
-                showToast(`Editing ${name || 'record'}`, 'info');
+                handleEditDonor(row);
             }
         });
     });
+}
+
+function handleDeleteDonor(row) {
+    const name = row.querySelector('.donor-cell span')?.textContent?.trim() || 'this record';
+    if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+
+    row.style.opacity = '0';
+    row.style.transform = 'translateX(-20px)';
+    setTimeout(() => {
+        row.remove();
+        const pagination = document.querySelector('.table-pagination span');
+        if (pagination) {
+            const match = pagination.textContent.match(/of (\d+)/);
+            if (match && parseInt(match[1]) > 0) {
+                pagination.textContent = pagination.textContent.replace(match[1], (parseInt(match[1]) - 1));
+            }
+        }
+        showToast(`${name} deleted`, 'success');
+    }, 300);
+}
+
+function handleViewDonor(row) {
+    const data = getDonorRowData(row);
+
+    document.getElementById('viewDonorAvatar').src = data.avatar;
+    document.getElementById('viewDonorAvatar').alt = data.name;
+    document.getElementById('viewDonorName').textContent = data.name;
+    document.getElementById('viewDonorMobile').textContent = data.mobile;
+    document.getElementById('viewDonorAmount').textContent = data.amount;
+    document.getElementById('viewDonorProgram').textContent = data.program;
+    document.getElementById('viewDonorDate').textContent = data.date;
+    document.getElementById('viewDonorStatus').textContent = data.status;
+    document.getElementById('viewDonorNotes').textContent = data.notes;
+
+    const typeBadge = document.getElementById('viewDonorType');
+    const typeClass = data.type.toLowerCase().replace(/\s+/g, '-');
+    typeBadge.className = 'badge-pill ' + typeClass;
+    typeBadge.textContent = data.type;
+
+    // Edit from view modal
+    document.getElementById('viewDonorEditBtn').onclick = () => {
+        closeModal('viewDonorModal');
+        handleEditDonor(row);
+    };
+
+    openModal('viewDonorModal');
+}
+
+function handleEditDonor(row) {
+    const data = getDonorRowData(row);
+    const nameParts = data.name.split(' ');
+
+    document.getElementById('donorFirstName').value = nameParts[0] || '';
+    document.getElementById('donorLastName').value = nameParts.slice(1).join(' ') || '';
+    document.getElementById('donorPhone').value = data.mobile;
+    document.getElementById('donorAmount').value = data.amount.replace(/[₹,]/g, '');
+    document.getElementById('donorType').value = data.type;
+    document.getElementById('donorStatus').value = data.status || 'Completed';
+
+    // Match program from known list
+    const programSelect = document.getElementById('donorProgram');
+    const programMatch = Array.from(programSelect.options).find(o =>
+        o.textContent.toLowerCase().includes(data.program.toLowerCase()) && data.program !== 'General Fund'
+    );
+    programSelect.value = programMatch ? programMatch.value : 'General Fund';
+
+    document.getElementById('donorNotes').value = row.dataset.notes && row.dataset.notes !== 'No notes available.'
+        ? row.dataset.notes : '';
+
+    document.querySelector('#addDonorModal .modal-header h3').textContent = 'Edit Donor';
+    document.getElementById('donorSubmitBtn').textContent = 'Save Changes';
+    editingDonorRow = row;
+    openModal('addDonorModal');
 }
 
 function exportTableToCSV(filename) {

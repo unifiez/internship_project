@@ -135,7 +135,7 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon" style="background: #eef2ff; color: #4f46e5;">
-                        <i class="fas fa-rupee-sign"></i>
+                        <i class="fas fa-indian-rupee-sign"></i>
                     </div>
                     <div class="stat-info">
                         <h3>₹2,48,500</h3>
@@ -518,7 +518,7 @@
                         <tr>
                             <th><input type="checkbox" id="selectAll"></th>
                             <th>Donor</th>
-                            <th>Email</th>
+                            <th>Mobile</th>
                             <th>Amount</th>
                             <th>Type</th>
                             <th>Date</th>
@@ -1219,29 +1219,25 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>First Name</label>
-                            <input type="text" placeholder="Enter first name" required>
+                            <input type="text" id="donorFirstName" placeholder="Enter first name" required>
                         </div>
                         <div class="form-group">
                             <label>Last Name</label>
-                            <input type="text" placeholder="Enter last name" required>
+                            <input type="text" id="donorLastName" placeholder="Enter last name" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" placeholder="Enter email" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="tel" placeholder="Enter phone number">
+                        <label>Mobile Number</label>
+                        <input type="tel" id="donorPhone" placeholder="+91 98765 43210" required>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Donation Amount (₹)</label>
-                            <input type="number" placeholder="0.00" required>
+                            <input type="number" id="donorAmount" placeholder="0.00" required>
                         </div>
                         <div class="form-group">
                             <label>Donation Type</label>
-                            <select required>
+                            <select id="donorType" required>
                                 <option value="">Select type</option>
                                 <option>One-Time</option>
                                 <option>Recurring</option>
@@ -1251,7 +1247,7 @@
                     </div>
                     <div class="form-group">
                         <label>Program</label>
-                        <select required>
+                        <select id="donorProgram" required>
                             <option value="">Select program</option>
                             <option>Education Initiative</option>
                             <option>Healthcare Program</option>
@@ -1261,15 +1257,68 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label>Status</label>
+                        <select id="donorStatus">
+                            <option>Completed</option>
+                            <option>Pending</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>Notes</label>
-                        <textarea rows="3" placeholder="Additional notes..."></textarea>
+                        <textarea id="donorNotes" rows="3" placeholder="Additional notes..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('addDonorModal')">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Donor</button>
+                    <button type="submit" class="btn btn-primary" id="donorSubmitBtn">Add Donor</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- View Donor Modal -->
+    <div class="modal-overlay" id="viewDonorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user"></i> Donor Details</h3>
+                <button class="modal-close" onclick="closeModal('viewDonorModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="view-donor-head">
+                    <img id="viewDonorAvatar" src="" alt="">
+                    <div>
+                        <h4 id="viewDonorName"></h4>
+                        <span id="viewDonorMobile"></span>
+                    </div>
+                    <span class="badge-pill" id="viewDonorType"></span>
+                </div>
+                <div class="view-donor-details">
+                    <div class="detail-row">
+                        <span>Donation Amount</span>
+                        <strong id="viewDonorAmount"></strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Program</span>
+                        <strong id="viewDonorProgram"></strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Date</span>
+                        <strong id="viewDonorDate"></strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Status</span>
+                        <strong id="viewDonorStatus"></strong>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <p class="view-donor-notes" id="viewDonorNotes">No notes available.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="viewDonorEditBtn"><i class="fas fa-pen"></i> Edit Donor</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('viewDonorModal')">Close</button>
+            </div>
         </div>
     </div>
 

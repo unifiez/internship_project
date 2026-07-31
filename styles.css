@@ -1598,9 +1598,80 @@ input, select, textarea {
 .modal-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
-    padding: 16px 24px;
+    gap: 12px;
+    padding: 20px 24px;
     border-top: 1px solid var(--border);
+}
+
+/* View Donor Modal */
+.view-donor-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+}
+
+.view-donor-head img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.view-donor-head h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.view-donor-head span {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.view-donor-head .badge-pill {
+    margin-left: auto;
+}
+
+.view-donor-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xs);
+    font-size: 0.875rem;
+}
+
+.detail-row span {
+    color: var(--text-secondary);
+}
+
+.detail-row strong {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.view-donor-notes {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xs);
+    padding: 12px 14px;
+    line-height: 1.6;
 }
 
 /* Upload Area */
