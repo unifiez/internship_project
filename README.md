@@ -8,9 +8,9 @@ A college internship project: a complete NGO web solution consisting of a **logi
 ngo/
 ├── index.html          # Admin dashboard (NGO management system)
 ├── styles.css          # Shared styles for the admin dashboard
-├── app.js              # Dashboard logic (charts, modals, filters, navigation, auth guard)
+├── app.js              # Dashboard logic (modals, filters, navigation, auth guard, donor CRUD)
 ├── login.html          # Login / Signup / Admin authentication page
-├── login.css           # Login page styles
+├── login.css           # Login page styles (matches website theme)
 ├── login.js            # Auth logic (localStorage users, sessions, validation)
 ├── README.md
 └── user/               # Public-facing NGO website
@@ -45,15 +45,20 @@ Password: admin123
 ## Features
 
 ### Admin Dashboard (`index.html`)
-- **Dashboard** – key stats (donations, beneficiaries, active programs, volunteers), donation charts with monthly/weekly/yearly filters, fund allocation chart, recent donations, upcoming events
+- **Dashboard** – key stats (donations, beneficiaries, active programs, volunteers), **fund allocation progress card**, recent donations, and upcoming events
 - **Programs** – program cards with category filters (Education, Healthcare, Environment, Community) and progress tracking
-- **Donors** – donor table with search, filters, selection, pagination, and CSV-style export (Indian donors with +91 mobiles)
+- **Donors** – full donor management with search, filters, selection, pagination, CSV export, and **working View / Edit / Delete / Add actions**:
+  - **View** – opens a Donor Details modal (avatar, name, mobile, amount, program, status, notes) with a quick "Edit Donor" shortcut
+  - **Edit** – pre-fills the donor form with the row's data and updates the row in place on save
+  - **Delete** – confirm prompt, then removes the row with animation and updates the pagination count
+  - **Add Donor** – appends a new row to the table (avatar, ₹ amount, badges) and updates pagination
 - **Events** – event cards with status badges (Upcoming / Scheduled / Completed)
 - **Team** – team member cards with social links
 - **Volunteers** – volunteer statistics and management
 - **Gallery** – image gallery section
 - Notifications panel, global search, sidebar navigation, and add/edit modals
 - All amounts displayed in **Indian Rupee (₹) format** with Indian number grouping (e.g., ₹2,48,500)
+- Indian donor data (+91 mobiles, Indian names)
 
 ### Public Website (`user/`)
 - Hero section with impact stats
@@ -62,10 +67,11 @@ Password: admin123
 - Donate form (one-time / monthly / yearly, custom amounts in ₹)
 - Volunteer signup form, contact form, newsletter signup
 - Partners strip, CTA banner, footer
-- Shows the logged-in user's name/avatar with a logout option in the navbar
+- Shows the logged-in user's name/avatar with a logout option in the navbar (desktop & mobile)
 
 ### Login Page (`login.html`)
 - Tabbed interface: **Login** (user), **Sign Up**, **Admin**
+- Styled to match the HopeRise website theme (same colors, fonts, buttons, and design tokens)
 - Indian mobile number validation (10 digits, starting with 6–9, formatted as `+91 XXXXX XXXXX`)
 - Name validation and auto-capitalization
 - Password strength check + show/hide password toggle
@@ -80,7 +86,6 @@ Password: admin123
 | **CSS3** (custom, no framework) | Styling, responsive layout, animations |
 | **JavaScript (Vanilla ES6)** | Interactivity, DOM manipulation, auth, form handling |
 | **localStorage / sessionStorage** | User accounts, sessions, remember-me |
-| **Chart.js 4.4.0** (CDN) | Dashboard charts (donation trends, fund allocation) |
 | **Font Awesome 6.4.0** (CDN) | Icons |
 | **Google Fonts – Inter** (CDN) | Typography |
 | **Unsplash / ui-avatars** (CDN) | Images and avatars (demo content) |
@@ -117,4 +122,4 @@ http://localhost:8080/user/
 - Add a backend (e.g., Node.js/Express or Django) with a database (MongoDB/PostgreSQL/SQLite)
 - Server-side authentication (JWT, password hashing)
 - Real donation/payment gateway integration (UPI, Razorpay, etc.)
-- Dynamic CRUD for programs, donors, events, and volunteers
+- Dynamic CRUD for programs, events, and volunteers (currently donor CRUD is implemented)
