@@ -8,677 +8,414 @@ function getSession() {
     }
 }
 
-function requireAdmin() {
+function requireUserLogin(message) {
     const session = getSession();
+    if (session && session.role) return session;
 
-    if (!session) {
-        window.location.href = 'login.html?role=admin';
-        return null;
-    }
-
-    if (session.role !== 'admin') {
-        window.location.href = 'login.html?error=unauthorized';
-        return null;
-    }
-
-    return session;
+    localStorage.setItem('hoperise_login_hint', message || 'Please login to continue');
+    localStorage.setItem('hoperise_return_url', window.location.href);
+    window.location.href = 'login/login.html?role=user&required=1';
+    return null;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const session = requireAdmin();
-    if (!session) return;
+    const session = getSession();
 
-    initAdminProfile(session);
-    initSidebar();
-    initNavigation();
-    initNotifications();
-    initUserDropdown(session);
-    initModals();
+    if (session && session.role) {
+        initUserSession(session);
+    } else {
+        initLoginButtons();
+    }
+
+    initNavbar();
+    initMobileMenu();
+    initSmoothScroll();
+    initScrollAnimations();
+    initCarousel();
+    initDonation();
     initForms();
-    initSearch();
-    initFilters();
-    initUploadArea();
-    initTableFeatures();
+    initBackToTop();
+    initCounters();
 });
 
-/* ========== ADMIN PROFILE ========== */
-function initAdminProfile(session) {
-    const profileImg = document.getElementById('userProfile').querySelector('img');
-    const profileName = document.getElementById('userProfile').querySelector('span');
-    const dropdownImg = document.getElementById('userDropdown').querySelector('.dropdown-header img');
-    const dropdownName = document.getElementById('userDropdown').querySelector('.dropdown-header strong');
-    const dropdownEmail = document.getElementById('userDropdown').querySelector('.dropdown-header span');
+/* ========== LOGIN BUTTONS (when logged out) ========== */
+function initLoginButtons() {
+    const actions = document.getElementById('navActions');
+    if (actions) {
+        const loginBtn = document.createElement('a');
+        loginBtn.href = 'login/login.html?role=user';
+        loginBtn.className = 'btn btn-outline btn-nav';
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        actions.appendChild(loginBtn);
+    }
 
-    const displayName = session.name || 'Admin User';
-    const displayEmail = session.email || 'admin@hoperise.org';
-
-    profileImg.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(displayName) + '&background=4f46e5&color=fff';
-    profileName.textContent = displayName;
-    dropdownImg.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(displayName) + '&background=4f46e5&color=fff';
-    dropdownName.textContent = displayName;
-    dropdownEmail.textContent = displayEmail;
+    const mobileActions = document.querySelector('.nav-mobile-actions');
+    if (mobileActions) {
+        const mobileLogin = document.createElement('a');
+        mobileLogin.href = 'login/login.html?role=user';
+        mobileLogin.className = 'btn btn-outline btn-nav';
+        mobileLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        mobileActions.appendChild(mobileLogin);
+    }
 }
 
-/* ========== SIDEBAR ========== */
-function initSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebarClose = document.getElementById('sidebarClose');
+/* ========== USER SESSION ========== */
+function initUserSession(session) {
+    const actions = document.getElementById('navActions');
+    if (!actions) return;
 
-    menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('open');
+    const logoutBtn = document.createElement('a');
+    logoutBtn.href = '#';
+    logoutBtn.className = 'nav-user-chip';
+    logoutBtn.innerHTML = `
+        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(session.name || 'User')}&background=4f46e5&color=fff&size=32" alt="">
+        <span>${session.name || 'User'}</span>
+        <i class="fas fa-sign-out-alt" title="Logout"></i>
+    `;
+
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem(SESSION_KEY);
+        sessionStorage.removeItem(SESSION_KEY);
+        window.location.href = 'login/login.html?logout=1';
     });
 
-    sidebarClose.addEventListener('click', () => {
-        sidebar.classList.remove('open');
-    });
+    actions.appendChild(logoutBtn);
 
-    document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 992 && sidebar.classList.contains('open') &&
-            !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
-            sidebar.classList.remove('open');
-        }
-    });
-}
-
-/* ========== NAVIGATION ========== */
-function initNavigation() {
-    const navLinks = document.querySelectorAll('.nav-link[data-section]');
-    const sections = document.querySelectorAll('.content-section');
-    const pageTitle = document.getElementById('pageTitle');
-
-    const titles = {
-        dashboard: 'Dashboard',
-        programs: 'Programs & Initiatives',
-        donors: 'Donor Management',
-        events: 'Event Management',
-        team: 'Our Team',
-        volunteers: 'Volunteer Management',
-        gallery: 'Photo Gallery',
-        settings: 'Settings'
-    };
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
+    const mobileActions = document.querySelector('.nav-mobile-actions');
+    if (mobileActions) {
+        const mobileLogout = logoutBtn.cloneNode(true);
+        mobileLogout.classList.add('btn-logout-mobile');
+        mobileLogout.addEventListener('click', (e) => {
             e.preventDefault();
-            const section = link.dataset.section;
+            localStorage.removeItem(SESSION_KEY);
+            sessionStorage.removeItem(SESSION_KEY);
+            window.location.href = 'login/login.html?logout=1';
+        });
+        mobileActions.appendChild(mobileLogout);
+    }
+}
 
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
+/* ========== NAVBAR ========== */
+function initNavbar() {
+    const navbar = document.getElementById('navbar');
+    const sections = document.querySelectorAll('.section, .hero');
+    const navLinks = document.querySelectorAll('.nav-link');
 
-            sections.forEach(s => s.classList.remove('active'));
-            const target = document.getElementById('section-' + section);
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 60) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+
+        let current = '';
+        sections.forEach(section => {
+            const top = section.offsetTop - 120;
+            if (window.scrollY >= top) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    });
+}
+
+/* ========== MOBILE MENU ========== */
+function initMobileMenu() {
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+
+    function toggleMenu(open) {
+        navMenu.classList.toggle('open', open);
+        hamburger.classList.toggle('active', open);
+        overlay.classList.toggle('show', open);
+        document.body.style.overflow = open ? 'hidden' : '';
+    }
+
+    hamburger.addEventListener('click', () => toggleMenu(!navMenu.classList.contains('open')));
+
+    overlay.addEventListener('click', () => toggleMenu(false));
+
+    navMenu.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => toggleMenu(false));
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) toggleMenu(false);
+    });
+}
+
+/* ========== SMOOTH SCROLL ========== */
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(anchor.getAttribute('href'));
             if (target) {
-                target.classList.add('active');
+                target.scrollIntoView({ behavior: 'smooth' });
             }
-
-            pageTitle.textContent = titles[section] || 'Dashboard';
-
-            if (window.innerWidth <= 992) {
-                document.getElementById('sidebar').classList.remove('open');
-            }
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    });
-
-    // View All links
-    document.querySelectorAll('.view-all[data-goto]').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetSection = link.dataset.goto;
-            const navLink = document.querySelector(`.nav-link[data-section="${targetSection}"]`);
-            if (navLink) navLink.click();
         });
     });
 }
 
-/* ========== NOTIFICATIONS ========== */
-function initNotifications() {
-    const notifBtn = document.getElementById('notifBtn');
-    const notifPanel = document.getElementById('notifPanel');
-    const clearNotifs = document.getElementById('clearNotifs');
+/* ========== SCROLL ANIMATIONS ========== */
+function initScrollAnimations() {
+    const elements = document.querySelectorAll(
+        '.about-grid, .program-showcase-card, .impact-card, .event-card-public, ' +
+        '.story-card, .contact-card, .donate-wrapper, .volunteer-grid, ' +
+        '.about-feature, .perk, .donate-feature, .cta-content, .volunteer-form-card, ' +
+        '.donate-form-card, .contact-form-card'
+    );
 
-    notifBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        notifPanel.classList.toggle('show');
-        document.getElementById('userDropdown').classList.remove('show');
-    });
+    elements.forEach(el => el.classList.add('fade-up'));
 
-    clearNotifs.addEventListener('click', () => {
-        const items = notifPanel.querySelectorAll('.notif-item');
-        items.forEach(item => item.remove());
-        document.querySelector('.badge').textContent = '0';
-        notifPanel.classList.remove('show');
-        showToast('Notifications cleared', 'success');
-    });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-    document.addEventListener('click', (e) => {
-        if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
-            notifPanel.classList.remove('show');
+    elements.forEach(el => observer.observe(el));
+}
+
+/* ========== CAROUSEL ========== */
+function initCarousel() {
+    const track = document.getElementById('eventsTrack');
+    const prevBtn = document.getElementById('prevEvent');
+    const nextBtn = document.getElementById('nextEvent');
+    const dotsContainer = document.getElementById('carouselDots');
+
+    if (!track || !prevBtn || !nextBtn || !dotsContainer) return;
+
+    const slides = track.querySelectorAll('.event-slide');
+    let currentIndex = 0;
+    let slidesPerView = getSlidesPerView();
+
+    function getSlidesPerView() {
+        if (window.innerWidth <= 768) return 1;
+        if (window.innerWidth <= 1024) return 2;
+        return 3;
+    }
+
+    function getMaxIndex() {
+        return Math.max(0, slides.length - slidesPerView);
+    }
+
+    function createDots() {
+        dotsContainer.innerHTML = '';
+        const count = getMaxIndex() + 1;
+        for (let i = 0; i < count; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goTo(i));
+            dotsContainer.appendChild(dot);
         }
+    }
+
+    function update() {
+        const gap = 24;
+        const slideWidth = track.parentElement.offsetWidth / slidesPerView;
+        const offset = currentIndex * (slideWidth + gap);
+        track.style.transform = `translateX(-${offset}px)`;
+
+        dotsContainer.querySelectorAll('.carousel-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === currentIndex);
+        });
+    }
+
+    function goTo(index) {
+        currentIndex = Math.max(0, Math.min(index, getMaxIndex()));
+        update();
+    }
+
+    prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+    nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
+
+    createDots();
+    update();
+
+    window.addEventListener('resize', () => {
+        slidesPerView = getSlidesPerView();
+        currentIndex = Math.min(currentIndex, getMaxIndex());
+        createDots();
+        update();
     });
 }
 
-/* ========== USER DROPDOWN ========== */
-function initUserDropdown(session) {
-    const userProfile = document.getElementById('userProfile');
-    const userDropdown = document.getElementById('userDropdown');
+/* ========== INDIAN FORMATTING ========== */
+function formatINR(value) {
+    return '₹' + Number(value).toLocaleString('en-IN');
+}
 
-    userProfile.addEventListener('click', (e) => {
-        e.stopPropagation();
-        userDropdown.classList.toggle('show');
-        document.getElementById('notifPanel').classList.remove('show');
-    });
+/* ========== DONATION ========== */
+function initDonation() {
+    const amountBtns = document.querySelectorAll('.amount-btn');
+    const customInput = document.getElementById('customAmount');
+    const donateAmountDisplay = document.getElementById('donateAmount');
+    const donateBtn = document.getElementById('donateBtn');
+    const freqBtns = document.querySelectorAll('.freq-btn');
 
-    document.addEventListener('click', (e) => {
-        if (!userDropdown.contains(e.target) && !userProfile.contains(e.target)) {
-            userDropdown.classList.remove('show');
-        }
-    });
+    let selectedAmount = 100;
 
-    userDropdown.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            userDropdown.classList.remove('show');
-            const text = link.textContent.trim();
-
-            if (text === 'Account Settings') {
-                const settingsLink = document.querySelector('.nav-link[data-section="settings"]');
-                if (settingsLink) settingsLink.click();
-            } else if (text === 'Logout') {
-                if (confirm('Are you sure you want to logout?')) {
-                    localStorage.removeItem(SESSION_KEY);
-                    sessionStorage.removeItem(SESSION_KEY);
-                    window.location.href = 'login.html?logout=1';
-                }
-            } else if (text === 'My Profile') {
-                showToast('Admin: ' + (session ? session.email : 'admin@hoperise.org'), 'info');
-            } else if (text === 'Help Center') {
-                showToast('Contact support at support@hoperise.org', 'info');
-            }
+    freqBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            freqBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const freq = btn.dataset.freq;
+            const label = freq === 'one-time' ? '' : '/' + freq.replace('ly', '');
+            donateAmountDisplay.textContent = formatINR(selectedAmount) + label;
         });
     });
-}
 
-/* ========== MODALS ========== */
-function initModals() {
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('show');
-            }
+    amountBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            amountBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedAmount = parseInt(btn.dataset.amount);
+            customInput.value = '';
+            donateAmountDisplay.textContent = formatINR(selectedAmount);
         });
     });
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show'));
-        }
+    customInput.addEventListener('input', () => {
+        amountBtns.forEach(b => b.classList.remove('active'));
+        selectedAmount = parseInt(customInput.value) || 0;
+        donateAmountDisplay.textContent = selectedAmount > 0 ? formatINR(selectedAmount) : formatINR(0);
     });
-}
 
-function openModal(id) {
-    const modal = document.getElementById(id);
-    if (modal) modal.classList.add('show');
-}
+    donateBtn.addEventListener('click', () => {
+        if (selectedAmount <= 0) {
+            showToast('Please select or enter a donation amount', 'error');
+            return;
+        }
 
-function closeModal(id) {
-    const modal = document.getElementById(id);
-    if (modal) modal.classList.remove('show');
+        const session = requireUserLogin('Please login to make a donation');
+        if (!session) return;
+
+        showToast(`Thank you for your generous donation of ${formatINR(selectedAmount)}!`, 'success');
+    });
 }
 
 /* ========== FORMS ========== */
-let editingDonorRow = null;
-
 function initForms() {
-    document.querySelectorAll('form').forEach(form => {
-        form.addEventListener('submit', (e) => {
+    const volunteerForm = document.getElementById('volunteerForm');
+    if (volunteerForm) {
+        volunteerForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const formId = form.id;
 
-            if (formId === 'addDonorForm') {
-                handleDonorFormSubmit();
-                return;
-            }
+            const session = requireUserLogin('Please login to register as a volunteer');
+            if (!session) return;
 
-            const modal = form.closest('.modal-overlay');
-            if (modal) {
-                modal.classList.remove('show');
-            }
-
-            const messages = {
-                addEventForm: 'Event created successfully!',
-                addProgramForm: 'Program added successfully!',
-                addTeamForm: 'Team member added successfully!',
-                addVolunteerForm: 'Volunteer added successfully!',
-                addPhotoForm: 'Photo uploaded successfully!'
-            };
-
-            showToast(messages[formId] || 'Action completed!', 'success');
-            form.reset();
-        });
-    });
-}
-
-function handleDonorFormSubmit() {
-    const firstName = document.getElementById('donorFirstName').value.trim();
-    const lastName = document.getElementById('donorLastName').value.trim();
-    const mobile = document.getElementById('donorPhone').value.trim();
-    const amount = document.getElementById('donorAmount').value.trim();
-    const type = document.getElementById('donorType').value;
-    const program = document.getElementById('donorProgram').value;
-    const status = document.getElementById('donorStatus').value;
-    const notes = document.getElementById('donorNotes').value.trim();
-
-    const fullName = (firstName + ' ' + lastName).trim();
-    const amountINR = '₹' + Number(amount).toLocaleString('en-IN');
-
-    const avatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(fullName) + '&background=4f46e5&color=fff';
-
-    const statusClass = status === 'Pending' ? 'pending' : 'completed';
-    const typeClass = type.toLowerCase().replace(/\s+/g, '-');
-    const today = new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
-
-    if (editingDonorRow) {
-        // Update existing row
-        const row = editingDonorRow;
-        row.querySelector('.donor-cell img').src = avatar;
-        row.querySelector('.donor-cell img').alt = fullName;
-        row.querySelector('.donor-cell span').textContent = fullName;
-        row.cells[2].textContent = mobile;
-        row.querySelector('.amount').textContent = amountINR;
-        const typeBadge = row.querySelector('.badge-pill');
-        typeBadge.className = 'badge-pill ' + typeClass;
-        typeBadge.textContent = type;
-        row.dataset.program = program;
-        row.dataset.notes = notes;
-
-        showToast(`${fullName} updated successfully!`, 'success');
-        editingDonorRow = null;
-        document.getElementById('donorSubmitBtn').textContent = 'Add Donor';
-        document.querySelector('#addDonorModal .modal-header h3').textContent = 'Add New Donor';
-    } else {
-        // Append new row
-        const table = document.querySelector('#donorTable tbody');
-        const tr = document.createElement('tr');
-        tr.dataset.program = program;
-        tr.dataset.notes = notes;
-        tr.innerHTML = `
-            <td><input type="checkbox" class="row-check"></td>
-            <td>
-                <div class="donor-cell">
-                    <img src="${avatar}" alt="">
-                    <span>${fullName}</span>
-                </div>
-            </td>
-            <td>${mobile}</td>
-            <td class="amount">${amountINR}</td>
-            <td><span class="badge-pill ${typeClass}">${type}</span></td>
-            <td>${today}</td>
-            <td><span class="badge-pill ${statusClass}">${status}</span></td>
-            <td>
-                <div class="action-btns">
-                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
-                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
-                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
-                </div>
-            </td>
-        `;
-        table.appendChild(tr);
-
-        // Update pagination count
-        const pagination = document.querySelector('.table-pagination span');
-        if (pagination) {
-            const match = pagination.textContent.match(/of (\d+)/);
-            if (match) {
-                pagination.textContent = pagination.textContent.replace(match[1], (parseInt(match[1]) + 1));
-            }
-        }
-
-        bindRowActions(tr.querySelectorAll('.action-btn'));
-
-        showToast(`${fullName} added successfully!`, 'success');
-    }
-
-    document.getElementById('addDonorForm').reset();
-    closeModal('addDonorModal');
-}
-
-/* ========== SEARCH ========== */
-function initSearch() {
-    const globalSearch = document.getElementById('globalSearch');
-    globalSearch.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
-        if (query.length < 2) return;
-        showToast(`Searching for "${query}"...`, 'info');
-    });
-
-    // Donor table search
-    const donorSearch = document.getElementById('donorSearch');
-    if (donorSearch) {
-        donorSearch.addEventListener('input', (e) => {
-            filterTable('donorTable', e.target.value);
+            showToast('Thank you for signing up! We\'ll be in touch soon.', 'success');
+            volunteerForm.reset();
         });
     }
 
-    // Volunteer table search
-    const volunteerSearch = document.getElementById('volunteerSearch');
-    if (volunteerSearch) {
-        volunteerSearch.addEventListener('input', (e) => {
-            filterTable('volunteerTable', e.target.value);
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('Message sent successfully! We\'ll get back to you within 24 hours.', 'success');
+            contactForm.reset();
+        });
+    }
+
+    const newsletterForm = document.getElementById('newsletterForm');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('Subscribed to our newsletter!', 'success');
+            newsletterForm.reset();
         });
     }
 }
 
-function filterTable(tableId, query) {
-    const table = document.getElementById(tableId);
-    if (!table) return;
-    const rows = table.querySelectorAll('tbody tr');
-    const q = query.toLowerCase();
+/* ========== BACK TO TOP ========== */
+function initBackToTop() {
+    const btn = document.getElementById('backToTop');
+    if (!btn) return;
 
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(q) ? '' : 'none';
-    });
-}
-
-/* ========== FILTERS ========== */
-function initFilters() {
-    // Program filters
-    document.querySelectorAll('.filter-bar .filter-pill').forEach(pill => {
-        pill.addEventListener('click', () => {
-            document.querySelectorAll('.filter-bar .filter-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-
-            const filter = pill.dataset.filter;
-            document.querySelectorAll('.program-card').forEach(card => {
-                if (filter === 'all' || card.dataset.category === filter) {
-                    card.style.display = '';
-                    card.style.animation = 'fadeIn 0.4s ease';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    });
-
-    // Gallery filters
-    document.querySelectorAll('.gallery-filter .filter-pill').forEach(pill => {
-        pill.addEventListener('click', () => {
-            document.querySelectorAll('.gallery-filter .filter-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-
-            const filter = pill.dataset.gfilter;
-            document.querySelectorAll('.gallery-item').forEach(item => {
-                if (filter === 'all' || item.dataset.gcat === filter) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
-    });
-
-    // Donor type filter
-    const donorFilter = document.getElementById('donorFilter');
-    if (donorFilter) {
-        donorFilter.addEventListener('change', (e) => {
-            const type = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('#donorTable tbody tr');
-
-            rows.forEach(row => {
-                if (type === 'all') {
-                    row.style.display = '';
-                } else {
-                    const badge = row.querySelector('.badge-pill')?.textContent.toLowerCase();
-                    const isMajor = parseFloat(row.querySelector('.amount')?.textContent.replace(/[₹$,]/g, '')) >= 5000;
-                    if (type === 'major') {
-                        row.style.display = isMajor ? '' : 'none';
-                    } else {
-                        row.style.display = badge && badge.includes(type) ? '' : 'none';
-                    }
-                }
-            });
-        });
-    }
-}
-
-/* ========== UPLOAD AREA ========== */
-function initUploadArea() {
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
-
-    if (!uploadArea || !fileInput) return;
-
-    uploadArea.addEventListener('click', () => fileInput.click());
-
-    uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.style.borderColor = '#4f46e5';
-        uploadArea.style.background = '#f5f3ff';
-    });
-
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.style.borderColor = '';
-        uploadArea.style.background = '';
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.style.borderColor = '';
-        uploadArea.style.background = '';
-
-        const files = e.dataTransfer.files;
-        if (files.length) {
-            handleFileUpload(files[0]);
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+            btn.classList.add('show');
+        } else {
+            btn.classList.remove('show');
         }
     });
 
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length) {
-            handleFileUpload(e.target.files[0]);
-        }
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 }
 
-function handleFileUpload(file) {
-    if (!file.type.startsWith('image/')) {
-        showToast('Please upload an image file', 'error');
-        return;
-    }
+/* ========== COUNTER ANIMATION ========== */
+function initCounters() {
+    const counters = document.querySelectorAll('.counter');
+    if (!counters.length) return;
 
-    if (file.size > 10 * 1024 * 1024) {
-        showToast('File size must be less than 10MB', 'error');
-        return;
-    }
-
-    const uploadArea = document.getElementById('uploadArea');
-    uploadArea.innerHTML = `
-        <i class="fas fa-check-circle" style="color: #16a34a;"></i>
-        <h4>${file.name}</h4>
-        <p>${(file.size / 1024 / 1024).toFixed(2)} MB</p>
-    `;
-    showToast('File ready for upload', 'success');
-}
-
-/* ========== TABLE FEATURES ========== */
-function initTableFeatures() {
-    const selectAll = document.getElementById('selectAll');
-    if (selectAll) {
-        selectAll.addEventListener('change', (e) => {
-            document.querySelectorAll('.row-check').forEach(cb => {
-                cb.checked = e.target.checked;
-            });
-        });
-    }
-
-    // Export button
-    const exportBtn = document.getElementById('exportDonors');
-    if (exportBtn) {
-        exportBtn.addEventListener('click', () => {
-            exportTableToCSV('donors_export.csv');
-        });
-    }
-
-    // Action buttons
-    bindRowActions(document.querySelectorAll('.action-btn'));
-}
-
-function getDonorRowData(row) {
-    const name = row.querySelector('.donor-cell span')?.textContent?.trim() || '';
-    const mobile = row.cells[2]?.textContent?.trim() || '';
-    const amount = row.querySelector('.amount')?.textContent?.trim() || '₹0';
-    const typeBadge = row.querySelector('.badge-pill');
-    const type = typeBadge?.textContent?.trim() || '';
-    const date = row.cells[5]?.textContent?.trim() || '';
-    const status = row.cells[6]?.textContent?.trim() || '';
-    const avatar = row.querySelector('.donor-cell img')?.src || '';
-    const program = row.dataset.program || 'General Fund';
-    const notes = row.dataset.notes || 'No notes available.';
-
-    return { name, mobile, amount, type, date, status, avatar, program, notes };
-}
-
-function bindRowActions(buttons) {
-    buttons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const icon = btn.querySelector('i');
-            const row = btn.closest('tr');
-            if (!row) return;
-
-            if (icon.classList.contains('fa-trash')) {
-                handleDeleteDonor(row);
-            } else if (icon.classList.contains('fa-eye')) {
-                handleViewDonor(row);
-            } else if (icon.classList.contains('fa-pen')) {
-                handleEditDonor(row);
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                observer.unobserve(entry.target);
             }
         });
-    });
+    }, { threshold: 0.5 });
+
+    counters.forEach(counter => observer.observe(counter));
 }
 
-function handleDeleteDonor(row) {
-    const name = row.querySelector('.donor-cell span')?.textContent?.trim() || 'this record';
-    if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+function animateCounter(el) {
+    const target = parseInt(el.dataset.target);
+    const isCurrency = el.dataset.currency === 'true';
+    const duration = 2000;
+    const start = performance.now();
 
-    row.style.opacity = '0';
-    row.style.transform = 'translateX(-20px)';
-    setTimeout(() => {
-        row.remove();
-        const pagination = document.querySelector('.table-pagination span');
-        if (pagination) {
-            const match = pagination.textContent.match(/of (\d+)/);
-            if (match && parseInt(match[1]) > 0) {
-                pagination.textContent = pagination.textContent.replace(match[1], (parseInt(match[1]) - 1));
-            }
+    function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(eased * target);
+
+        if (isCurrency) {
+            el.textContent = '₹' + current.toLocaleString('en-IN') + '+';
+        } else if (target >= 1000000) {
+            el.textContent = (current / 1000000).toFixed(1) + 'M+';
+        } else if (target >= 1000) {
+            el.textContent = (current / 1000).toFixed(0) + 'K+';
+        } else {
+            el.textContent = current + '+';
         }
-        showToast(`${name} deleted`, 'success');
-    }, 300);
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+
+    requestAnimationFrame(update);
 }
 
-function handleViewDonor(row) {
-    const data = getDonorRowData(row);
-
-    document.getElementById('viewDonorAvatar').src = data.avatar;
-    document.getElementById('viewDonorAvatar').alt = data.name;
-    document.getElementById('viewDonorName').textContent = data.name;
-    document.getElementById('viewDonorMobile').textContent = data.mobile;
-    document.getElementById('viewDonorAmount').textContent = data.amount;
-    document.getElementById('viewDonorProgram').textContent = data.program;
-    document.getElementById('viewDonorDate').textContent = data.date;
-    document.getElementById('viewDonorStatus').textContent = data.status;
-    document.getElementById('viewDonorNotes').textContent = data.notes;
-
-    const typeBadge = document.getElementById('viewDonorType');
-    const typeClass = data.type.toLowerCase().replace(/\s+/g, '-');
-    typeBadge.className = 'badge-pill ' + typeClass;
-    typeBadge.textContent = data.type;
-
-    // Edit from view modal
-    document.getElementById('viewDonorEditBtn').onclick = () => {
-        closeModal('viewDonorModal');
-        handleEditDonor(row);
-    };
-
-    openModal('viewDonorModal');
-}
-
-function handleEditDonor(row) {
-    const data = getDonorRowData(row);
-    const nameParts = data.name.split(' ');
-
-    document.getElementById('donorFirstName').value = nameParts[0] || '';
-    document.getElementById('donorLastName').value = nameParts.slice(1).join(' ') || '';
-    document.getElementById('donorPhone').value = data.mobile;
-    document.getElementById('donorAmount').value = data.amount.replace(/[₹,]/g, '');
-    document.getElementById('donorType').value = data.type;
-    document.getElementById('donorStatus').value = data.status || 'Completed';
-
-    // Match program from known list
-    const programSelect = document.getElementById('donorProgram');
-    const programMatch = Array.from(programSelect.options).find(o =>
-        o.textContent.toLowerCase().includes(data.program.toLowerCase()) && data.program !== 'General Fund'
-    );
-    programSelect.value = programMatch ? programMatch.value : 'General Fund';
-
-    document.getElementById('donorNotes').value = row.dataset.notes && row.dataset.notes !== 'No notes available.'
-        ? row.dataset.notes : '';
-
-    document.querySelector('#addDonorModal .modal-header h3').textContent = 'Edit Donor';
-    document.getElementById('donorSubmitBtn').textContent = 'Save Changes';
-    editingDonorRow = row;
-    openModal('addDonorModal');
-}
-
-function exportTableToCSV(filename) {
-    const table = document.getElementById('donorTable');
-    if (!table) return;
-
-    let csv = [];
-    const rows = table.querySelectorAll('tr');
-
-    rows.forEach(row => {
-        const cols = row.querySelectorAll('th, td');
-        const rowData = [];
-        cols.forEach((col, i) => {
-            if (i === 0 && col.querySelector('input')) return; // skip checkbox
-            if (i === cols.length - 1) return; // skip actions
-            let text = col.textContent.trim().replace(/"/g, '""');
-            rowData.push('"' + text + '"');
-        });
-        csv.push(rowData.join(','));
-    });
-
-    const blob = new Blob([csv.join('\n')], { type: 'text/csv' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
-
-    showToast('Donors exported successfully', 'success');
-}
-
-/* ========== TOASTS ========== */
+/* ========== TOAST ========== */
 function showToast(message, type = 'info') {
     const container = document.getElementById('toastContainer');
-    const icons = {
-        success: 'fa-check-circle',
-        error: 'fa-exclamation-circle',
-        info: 'fa-info-circle'
-    };
+    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
 
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.innerHTML = `
-        <i class="fas ${icons[type]}"></i>
-        <span>${message}</span>
-    `;
-
+    toast.innerHTML = `<i class="fas ${icons[type]}"></i><span>${message}</span>`;
     container.appendChild(toast);
 
-    setTimeout(() => {
-        toast.remove();
-    }, 4000);
+    setTimeout(() => toast.remove(), 4000);
 }

@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HopeRise Foundation - NGO Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-hands-holding-heart"></i>
+                <span>HopeRise</span>
+            </div>
+            <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                <i class="fas fa-th-large"></i><span>Dashboard</span>
+            </a>
+            <a href="#programs" class="nav-link" data-section="programs">
+                <i class="fas fa-seedling"></i><span>Programs</span>
+            </a>
+            <a href="#donors" class="nav-link" data-section="donors">
+                <i class="fas fa-hand-holding-heart"></i><span>Donors</span>
+            </a>
+            <a href="#events" class="nav-link" data-section="events">
+                <i class="fas fa-calendar-alt"></i><span>Events</span>
+            </a>
+            <a href="#team" class="nav-link" data-section="team">
+                <i class="fas fa-users"></i><span>Team</span>
+            </a>
+            <a href="#volunteers" class="nav-link" data-section="volunteers">
+                <i class="fas fa-hands-helping"></i><span>Volunteers</span>
+            </a>
+            <a href="#gallery" class="nav-link" data-section="gallery">
+                <i class="fas fa-images"></i><span>Gallery</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#settings" class="nav-link" data-section="settings">
+                <i class="fas fa-cog"></i><span>Settings</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <h2 class="page-title" id="pageTitle">Dashboard</h2>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search..." id="globalSearch">
+                </div>
+                <button class="icon-btn" id="notifBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-profile" id="userProfile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=4f46e5&color=fff" alt="Admin">
+                    <span>Admin</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Notification Panel -->
+        <div class="notification-panel" id="notifPanel">
+            <div class="notif-header">
+                <h3>Notifications</h3>
+                <button id="clearNotifs">Clear All</button>
+            </div>
+            <div class="notif-list">
+                <div class="notif-item unread">
+                    <i class="fas fa-hand-holding-heart notif-icon donation"></i>
+                    <div class="notif-body">
+                        <p>New donation of <strong>₹5,000</strong> from Rahul Sharma</p>
+                        <span class="notif-time">2 minutes ago</span>
+                    </div>
+                </div>
+                <div class="notif-item unread">
+                    <i class="fas fa-user-plus notif-icon volunteer"></i>
+                    <div class="notif-body">
+                        <p>New volunteer registration: <strong>Aisha Khan</strong></p>
+                        <span class="notif-time">1 hour ago</span>
+                    </div>
+                </div>
+                <div class="notif-item unread">
+                    <i class="fas fa-calendar-check notif-icon event"></i>
+                    <div class="notif-body">
+                        <p>Event "Beach Cleanup Drive" starts in <strong>2 days</strong></p>
+                        <span class="notif-time">3 hours ago</span>
+                    </div>
+                </div>
+                <div class="notif-item">
+                    <i class="fas fa-check-circle notif-icon success"></i>
+                    <div class="notif-body">
+                        <p>Monthly report generated successfully</p>
+                        <span class="notif-time">Yesterday</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Dropdown -->
+        <div class="user-dropdown" id="userDropdown">
+            <div class="dropdown-header">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=4f46e5&color=fff" alt="Admin">
+                <div>
+                    <strong>Admin User</strong>
+                    <span>admin@hoperise.org</span>
+                </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="#"><i class="fas fa-user"></i> My Profile</a>
+            <a href="#"><i class="fas fa-cog"></i> Account Settings</a>
+            <a href="#"><i class="fas fa-question-circle"></i> Help Center</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+
+        <!-- ====== DASHBOARD SECTION ====== -->
+        <section class="content-section active" id="section-dashboard">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #eef2ff; color: #4f46e5;">
+                        <i class="fas fa-indian-rupee-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>₹2,48,500</h3>
+                        <p>Total Donations</p>
+                    </div>
+                    <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 12.5%</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f0fdf4; color: #16a34a;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>1,234</h3>
+                        <p>Beneficiaries</p>
+                    </div>
+                    <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 8.2%</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fef3c7; color: #d97706;">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>24</h3>
+                        <p>Active Programs</p>
+                    </div>
+                    <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 4.1%</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fce7f3; color: #db2777;">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>156</h3>
+                        <p>Volunteers</p>
+                    </div>
+                    <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 15.3%</span>
+                </div>
+            </div>
+
+            <!-- Recent Activity & Upcoming Events -->
+            <div class="info-row">
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-pie-chart card-icon"></i> Fund Allocation</h3>
+                    </div>
+                    <div class="allocation-list">
+                        <div class="allocation-item">
+                            <div class="progress-header">
+                                <span><span class="allocation-dot" style="background:#4f46e5;"></span> Education</span>
+                                <span>35% · ₹86,975</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:35%; background:linear-gradient(90deg,#4f46e5,#818cf8);"></div></div>
+                        </div>
+                        <div class="allocation-item">
+                            <div class="progress-header">
+                                <span><span class="allocation-dot" style="background:#16a34a;"></span> Healthcare</span>
+                                <span>25% · ₹62,125</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:25%; background:linear-gradient(90deg,#16a34a,#4ade80);"></div></div>
+                        </div>
+                        <div class="allocation-item">
+                            <div class="progress-header">
+                                <span><span class="allocation-dot" style="background:#d97706;"></span> Environment</span>
+                                <span>20% · ₹49,700</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:20%; background:linear-gradient(90deg,#d97706,#fbbf24);"></div></div>
+                        </div>
+                        <div class="allocation-item">
+                            <div class="progress-header">
+                                <span><span class="allocation-dot" style="background:#db2777;"></span> Community</span>
+                                <span>15% · ₹37,275</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:15%; background:linear-gradient(90deg,#db2777,#f472b6);"></div></div>
+                        </div>
+                        <div class="allocation-item">
+                            <div class="progress-header">
+                                <span><span class="allocation-dot" style="background:#94a3b8;"></span> Administration</span>
+                                <span>5% · ₹12,425</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:5%; background:linear-gradient(90deg,#94a3b8,#cbd5e1);"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3>Recent Donations</h3>
+                        <a href="#" class="view-all" data-goto="donors">View All</a>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <img src="https://ui-avatars.com/api/?name=Rahul+Sharma&background=4f46e5&color=fff" alt="">
+                            <div class="activity-info">
+                                <strong>Rahul Sharma</strong>
+                                <span>Education Fund</span>
+                            </div>
+                            <span class="activity-amount">₹5,000</span>
+                        </div>
+                        <div class="activity-item">
+                            <img src="https://ui-avatars.com/api/?name=Priya+Patel&background=16a34a&color=fff" alt="">
+                            <div class="activity-info">
+                                <strong>Priya Patel</strong>
+                                <span>Healthcare Initiative</span>
+                            </div>
+                            <span class="activity-amount">₹2,500</span>
+                        </div>
+                        <div class="activity-item">
+                            <img src="https://ui-avatars.com/api/?name=Arjun+Mehta&background=d97706&color=fff" alt="">
+                            <div class="activity-info">
+                                <strong>Arjun Mehta</strong>
+                                <span>Clean Water Project</span>
+                            </div>
+                            <span class="activity-amount">₹10,000</span>
+                        </div>
+                        <div class="activity-item">
+                            <img src="https://ui-avatars.com/api/?name=Sneha+Iyer&background=db2777&color=fff" alt="">
+                            <div class="activity-info">
+                                <strong>Sneha Iyer</strong>
+                                <span>General Fund</span>
+                            </div>
+                            <span class="activity-amount">₹750</span>
+                        </div>
+                        <div class="activity-item">
+                            <img src="https://ui-avatars.com/api/?name=Vikram+Singh&background=0891b2&color=fff" alt="">
+                            <div class="activity-info">
+                                <strong>Vikram Singh</strong>
+                                <span>Disaster Relief</span>
+                            </div>
+                            <span class="activity-amount">₹3,200</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3>Upcoming Events</h3>
+                        <a href="#" class="view-all" data-goto="events">View All</a>
+                    </div>
+                    <div class="event-list">
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="month">JUL</span>
+                                <span class="day">15</span>
+                            </div>
+                            <div class="event-info">
+                                <strong>Beach Cleanup Drive</strong>
+                                <span><i class="fas fa-map-marker-alt"></i> Miami Beach, FL</span>
+                                <span><i class="fas fa-clock"></i> 8:00 AM - 12:00 PM</span>
+                            </div>
+                            <span class="event-status upcoming">Upcoming</span>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="month">JUL</span>
+                                <span class="day">22</span>
+                            </div>
+                            <div class="event-info">
+                                <strong>Annual Charity Gala</strong>
+                                <span><i class="fas fa-map-marker-alt"></i> Grand Hotel, NYC</span>
+                                <span><i class="fas fa-clock"></i> 6:00 PM - 10:00 PM</span>
+                            </div>
+                            <span class="event-status upcoming">Upcoming</span>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="month">AUG</span>
+                                <span class="day">05</span>
+                            </div>
+                            <div class="event-info">
+                                <strong>Back to School Drive</strong>
+                                <span><i class="fas fa-map-marker-alt"></i> Community Center, LA</span>
+                                <span><i class="fas fa-clock"></i> 9:00 AM - 3:00 PM</span>
+                            </div>
+                            <span class="event-status scheduled">Scheduled</span>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="month">AUG</span>
+                                <span class="day">18</span>
+                            </div>
+                            <div class="event-info">
+                                <strong>Health Camp</strong>
+                                <span><i class="fas fa-map-marker-alt"></i> Riverside Park, Chicago</span>
+                                <span><i class="fas fa-clock"></i> 7:00 AM - 2:00 PM</span>
+                            </div>
+                            <span class="event-status scheduled">Scheduled</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== PROGRAMS SECTION ====== -->
+        <section class="content-section" id="section-programs">
+            <div class="section-header">
+                <h2>Our Programs & Initiatives</h2>
+                <button class="btn btn-primary" onclick="openModal('addProgramModal')"><i class="fas fa-plus"></i> Add Program</button>
+            </div>
+            <div class="filter-bar">
+                <button class="filter-pill active" data-filter="all">All Programs</button>
+                <button class="filter-pill" data-filter="education">Education</button>
+                <button class="filter-pill" data-filter="health">Healthcare</button>
+                <button class="filter-pill" data-filter="environment">Environment</button>
+                <button class="filter-pill" data-filter="community">Community</button>
+            </div>
+            <div class="programs-grid">
+                <div class="program-card" data-category="education">
+                    <div class="program-image">
+                        <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=400&h=250&fit=crop" alt="Education">
+                        <span class="program-tag education">Education</span>
+                    </div>
+                    <div class="program-body">
+                        <h3>Quality Education Initiative</h3>
+                        <p>Building schools and providing educational resources to children in underserved communities across 12 countries.</p>
+                        <div class="program-progress">
+                            <div class="progress-header">
+                                <span>Progress</span>
+                                <span>75%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 75%"></div></div>
+                        </div>
+                        <div class="program-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> 12 Countries</span>
+                            <span><i class="fas fa-users"></i> 10,000+ Students</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="program-card" data-category="health">
+                    <div class="program-image">
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=250&fit=crop" alt="Healthcare">
+                        <span class="program-tag health">Healthcare</span>
+                    </div>
+                    <div class="program-body">
+                        <h3>Mobile Health Clinics</h3>
+                        <p>Providing essential healthcare services through mobile clinics to remote and underserved populations.</p>
+                        <div class="program-progress">
+                            <div class="progress-header">
+                                <span>Progress</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 60%"></div></div>
+                        </div>
+                        <div class="program-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> 8 Countries</span>
+                            <span><i class="fas fa-users"></i> 25,000+ Patients</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="program-card" data-category="environment">
+                    <div class="program-image">
+                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=250&fit=crop" alt="Environment">
+                        <span class="program-tag environment">Environment</span>
+                    </div>
+                    <div class="program-body">
+                        <h3>Clean Water Project</h3>
+                        <p>Installing water purification systems and wells to provide clean drinking water to communities in need.</p>
+                        <div class="program-progress">
+                            <div class="progress-header">
+                                <span>Progress</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 85%"></div></div>
+                        </div>
+                        <div class="program-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> 15 Countries</span>
+                            <span><i class="fas fa-users"></i> 50,000+ People</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="program-card" data-category="community">
+                    <div class="program-image">
+                        <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=250&fit=crop" alt="Community">
+                        <span class="program-tag community">Community</span>
+                    </div>
+                    <div class="program-body">
+                        <h3>Women Empowerment Program</h3>
+                        <p>Supporting women through skill development, microfinance, and entrepreneurship training programs.</p>
+                        <div class="program-progress">
+                            <div class="progress-header">
+                                <span>Progress</span>
+                                <span>45%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 45%"></div></div>
+                        </div>
+                        <div class="program-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> 6 Countries</span>
+                            <span><i class="fas fa-users"></i> 5,000+ Women</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="program-card" data-category="education">
+                    <div class="program-image">
+                        <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&h=250&fit=crop" alt="Scholarship">
+                        <span class="program-tag education">Education</span>
+                    </div>
+                    <div class="program-body">
+                        <h3>Scholarship Fund</h3>
+                        <p>Providing financial support to talented students from low-income families to pursue higher education.</p>
+                        <div class="program-progress">
+                            <div class="progress-header">
+                                <span>Progress</span>
+                                <span>55%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 55%"></div></div>
+                        </div>
+                        <div class="program-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> 5 Countries</span>
+                            <span><i class="fas fa-users"></i> 1,200+ Scholars</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="program-card" data-category="environment">
+                    <div class="program-image">
+                        <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&h=250&fit=crop" alt="Reforestation">
+                        <span class="program-tag environment">Environment</span>
+                    </div>
+                    <div class="program-body">
+                        <h3>Reforestation Initiative</h3>
+                        <p>Planting millions of trees and restoring deforested areas to combat climate change and protect biodiversity.</p>
+                        <div class="program-progress">
+                            <div class="progress-header">
+                                <span>Progress</span>
+                                <span>30%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: 30%"></div></div>
+                        </div>
+                        <div class="program-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> 10 Countries</span>
+                            <span><i class="fas fa-tree"></i> 1M+ Trees</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== DONORS SECTION ====== -->
+        <section class="content-section" id="section-donors">
+            <div class="section-header">
+                <h2>Donor Management</h2>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="exportDonors"><i class="fas fa-download"></i> Export</button>
+                    <button class="btn btn-primary" onclick="openModal('addDonorModal')"><i class="fas fa-plus"></i> Add Donor</button>
+                </div>
+            </div>
+
+            <div class="donor-summary">
+                <div class="donor-stat-card">
+                    <h4>₹2,48,500</h4>
+                    <p>Total Raised</p>
+                </div>
+                <div class="donor-stat-card">
+                    <h4>342</h4>
+                    <p>Total Donors</p>
+                </div>
+                <div class="donor-stat-card">
+                    <h4>₹726</h4>
+                    <p>Average Donation</p>
+                </div>
+                <div class="donor-stat-card">
+                    <h4>89%</h4>
+                    <p>Retention Rate</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search donors..." id="donorSearch">
+                    </div>
+                    <div class="table-filters">
+                        <select id="donorFilter">
+                            <option value="all">All Donors</option>
+                            <option value="recurring">Recurring</option>
+                            <option value="one-time">One-Time</option>
+                            <option value="major">Major Donors</option>
+                        </select>
+                    </div>
+                </div>
+                <table class="data-table" id="donorTable">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
+                            <th>Donor</th>
+                            <th>Mobile</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" class="row-check"></td>
+                            <td>
+                                <div class="donor-cell">
+                                    <img src="https://ui-avatars.com/api/?name=Rahul+Sharma&background=4f46e5&color=fff" alt="">
+                                    <span>Rahul Sharma</span>
+                                </div>
+                            </td>
+                            <td>+91 98765 43210</td>
+                            <td class="amount">₹5,000</td>
+                            <td><span class="badge-pill recurring">Recurring</span></td>
+                            <td>Jul 10, 2026</td>
+                            <td><span class="badge-pill completed">Completed</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="row-check"></td>
+                            <td>
+                                <div class="donor-cell">
+                                    <img src="https://ui-avatars.com/api/?name=Priya+Patel&background=16a34a&color=fff" alt="">
+                                    <span>Priya Patel</span>
+                                </div>
+                            </td>
+                            <td>+91 99887 66554</td>
+                            <td class="amount">₹2,500</td>
+                            <td><span class="badge-pill one-time">One-Time</span></td>
+                            <td>Jul 8, 2026</td>
+                            <td><span class="badge-pill completed">Completed</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="row-check"></td>
+                            <td>
+                                <div class="donor-cell">
+                                    <img src="https://ui-avatars.com/api/?name=Arjun+Mehta&background=d97706&color=fff" alt="">
+                                    <span>Arjun Mehta</span>
+                                </div>
+                            </td>
+                            <td>+91 98111 22334</td>
+                            <td class="amount">₹10,000</td>
+                            <td><span class="badge-pill major">Major</span></td>
+                            <td>Jul 5, 2026</td>
+                            <td><span class="badge-pill completed">Completed</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="row-check"></td>
+                            <td>
+                                <div class="donor-cell">
+                                    <img src="https://ui-avatars.com/api/?name=Sneha+Iyer&background=db2777&color=fff" alt="">
+                                    <span>Sneha Iyer</span>
+                                </div>
+                            </td>
+                            <td>+91 91234 56789</td>
+                            <td class="amount">₹750</td>
+                            <td><span class="badge-pill recurring">Recurring</span></td>
+                            <td>Jul 3, 2026</td>
+                            <td><span class="badge-pill pending">Pending</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="row-check"></td>
+                            <td>
+                                <div class="donor-cell">
+                                    <img src="https://ui-avatars.com/api/?name=Vikram+Singh&background=0891b2&color=fff" alt="">
+                                    <span>Vikram Singh</span>
+                                </div>
+                            </td>
+                            <td>+91 90909 80807</td>
+                            <td class="amount">₹3,200</td>
+                            <td><span class="badge-pill one-time">One-Time</span></td>
+                            <td>Jul 1, 2026</td>
+                            <td><span class="badge-pill completed">Completed</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="row-check"></td>
+                            <td>
+                                <div class="donor-cell">
+                                    <img src="https://ui-avatars.com/api/?name=Ananya+Gupta&background=7c3aed&color=fff" alt="">
+                                    <span>Ananya Gupta</span>
+                                </div>
+                            </td>
+                            <td>+91 87654 32109</td>
+                            <td class="amount">₹1,500</td>
+                            <td><span class="badge-pill recurring">Recurring</span></td>
+                            <td>Jun 28, 2026</td>
+                            <td><span class="badge-pill completed">Completed</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                                    <button class="action-btn delete" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="table-pagination">
+                    <span>Showing 1-6 of 342 donors</span>
+                    <div class="pagination-btns">
+                        <button class="page-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">...</button>
+                        <button class="page-btn">57</button>
+                        <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== EVENTS SECTION ====== -->
+        <section class="content-section" id="section-events">
+            <div class="section-header">
+                <h2>Event Management</h2>
+                <button class="btn btn-primary" onclick="openModal('addEventModal')"><i class="fas fa-plus"></i> Create Event</button>
+            </div>
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-card-image">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=200&fit=crop" alt="Beach Cleanup">
+                        <span class="event-badge upcoming">Upcoming</span>
+                    </div>
+                    <div class="event-card-body">
+                        <div class="event-card-date">
+                            <i class="fas fa-calendar"></i> Jul 15, 2026
+                        </div>
+                        <h3>Beach Cleanup Drive</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Miami Beach, FL</p>
+                        <p><i class="fas fa-clock"></i> 8:00 AM - 12:00 PM</p>
+                        <div class="event-card-footer">
+                            <div class="event-attendees">
+                                <div class="avatar-stack">
+                                    <img src="https://ui-avatars.com/api/?name=A&background=4f46e5&color=fff&size=28" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=B&background=16a34a&color=fff&size=28" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=C&background=d97706&color=fff&size=28" alt="">
+                                </div>
+                                <span>45 registered</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary">Manage</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-card-image">
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=200&fit=crop" alt="Charity Gala">
+                        <span class="event-badge upcoming">Upcoming</span>
+                    </div>
+                    <div class="event-card-body">
+                        <div class="event-card-date">
+                            <i class="fas fa-calendar"></i> Jul 22, 2026
+                        </div>
+                        <h3>Annual Charity Gala</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Grand Hotel, NYC</p>
+                        <p><i class="fas fa-clock"></i> 6:00 PM - 10:00 PM</p>
+                        <div class="event-card-footer">
+                            <div class="event-attendees">
+                                <div class="avatar-stack">
+                                    <img src="https://ui-avatars.com/api/?name=D&background=db2777&color=fff&size=28" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=E&background=0891b2&color=fff&size=28" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=F&background=7c3aed&color=fff&size=28" alt="">
+                                </div>
+                                <span>120 registered</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary">Manage</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-card-image">
+                        <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&h=200&fit=crop" alt="School Drive">
+                        <span class="event-badge scheduled">Scheduled</span>
+                    </div>
+                    <div class="event-card-body">
+                        <div class="event-card-date">
+                            <i class="fas fa-calendar"></i> Aug 05, 2026
+                        </div>
+                        <h3>Back to School Drive</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Community Center, LA</p>
+                        <p><i class="fas fa-clock"></i> 9:00 AM - 3:00 PM</p>
+                        <div class="event-card-footer">
+                            <div class="event-attendees">
+                                <div class="avatar-stack">
+                                    <img src="https://ui-avatars.com/api/?name=G&background=16a34a&color=fff&size=28" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=H&background=4f46e5&color=fff&size=28" alt="">
+                                </div>
+                                <span>28 registered</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary">Manage</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-card-image">
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=200&fit=crop" alt="Health Camp">
+                        <span class="event-badge scheduled">Scheduled</span>
+                    </div>
+                    <div class="event-card-body">
+                        <div class="event-card-date">
+                            <i class="fas fa-calendar"></i> Aug 18, 2026
+                        </div>
+                        <h3>Community Health Camp</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Riverside Park, Chicago</p>
+                        <p><i class="fas fa-clock"></i> 7:00 AM - 2:00 PM</p>
+                        <div class="event-card-footer">
+                            <div class="event-attendees">
+                                <div class="avatar-stack">
+                                    <img src="https://ui-avatars.com/api/?name=I&background=d97706&color=fff&size=28" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=J&background=db2777&color=fff&size=28" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=K&background=0891b2&color=fff&size=28" alt="">
+                                </div>
+                                <span>60 registered</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary">Manage</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-card-image">
+                        <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=400&h=200&fit=crop" alt="Food Drive">
+                        <span class="event-badge completed">Completed</span>
+                    </div>
+                    <div class="event-card-body">
+                        <div class="event-card-date">
+                            <i class="fas fa-calendar"></i> Jun 20, 2026
+                        </div>
+                        <h3>Summer Food Drive</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Central Park, Dallas</p>
+                        <p><i class="fas fa-clock"></i> 10:00 AM - 4:00 PM</p>
+                        <div class="event-card-footer">
+                            <div class="event-attendees">
+                                <div class="avatar-stack">
+                                    <img src="https://ui-avatars.com/api/?name=L&background=7c3aed&color=fff&size=28" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=M&background=16a34a&color=fff&size=28" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=N&background=4f46e5&color=fff&size=28" alt="">
+                                </div>
+                                <span>75 attended</span>
+                            </div>
+                            <button class="btn btn-sm btn-secondary">Report</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-card-image">
+                        <img src="https://images.unsplash.com/photo-1593113630400-ea4288922497?w=400&h=200&fit=crop" alt="Clothing Drive">
+                        <span class="event-badge completed">Completed</span>
+                    </div>
+                    <div class="event-card-body">
+                        <div class="event-card-date">
+                            <i class="fas fa-calendar"></i> Jun 05, 2026
+                        </div>
+                        <h3>Winter Clothing Drive</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> City Hall, Boston</p>
+                        <p><i class="fas fa-clock"></i> 9:00 AM - 5:00 PM</p>
+                        <div class="event-card-footer">
+                            <div class="event-attendees">
+                                <div class="avatar-stack">
+                                    <img src="https://ui-avatars.com/api/?name=O&background=d97706&color=fff&size=28" alt="">
+                                    <img src="https://ui-avatars.com/api/?name=P&background=db2777&color=fff&size=28" alt="">
+                                </div>
+                                <span>50 attended</span>
+                            </div>
+                            <button class="btn btn-sm btn-secondary">Report</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== TEAM SECTION ====== -->
+        <section class="content-section" id="section-team">
+            <div class="section-header">
+                <h2>Our Team</h2>
+                <button class="btn btn-primary" onclick="openModal('addTeamModal')"><i class="fas fa-plus"></i> Add Member</button>
+            </div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Rachel+Green&background=4f46e5&color=fff&size=120" alt="">
+                    </div>
+                    <h3>Rachel Green</h3>
+                    <p class="team-role">Executive Director</p>
+                    <p class="team-bio">Leading our global initiatives with 15+ years of experience in humanitarian work.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <img src="https://ui-avatars.com/api/?name=James+Wilson&background=16a34a&color=fff&size=120" alt="">
+                    </div>
+                    <h3>James Wilson</h3>
+                    <p class="team-role">Programs Director</p>
+                    <p class="team-bio">Overseeing all program operations and ensuring effective community impact.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Maria+Garcia&background=d97706&color=fff&size=120" alt="">
+                    </div>
+                    <h3>Maria Garcia</h3>
+                    <p class="team-role">Finance Manager</p>
+                    <p class="team-bio">Managing financial operations and ensuring transparent use of funds.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Alex+Johnson&background=db2777&color=fff&size=120" alt="">
+                    </div>
+                    <h3>Alex Johnson</h3>
+                    <p class="team-role">Volunteer Coordinator</p>
+                    <p class="team-bio">Building and managing our network of dedicated volunteers worldwide.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Sam+Chen&background=0891b2&color=fff&size=120" alt="">
+                    </div>
+                    <h3>Sam Chen</h3>
+                    <p class="team-role">Communications Lead</p>
+                    <p class="team-bio">Spreading our message and engaging communities through strategic communications.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Lisa+Park&background=7c3aed&color=fff&size=120" alt="">
+                    </div>
+                    <h3>Lisa Park</h3>
+                    <p class="team-role">Impact Analyst</p>
+                    <p class="team-bio">Measuring and reporting the impact of our programs across all regions.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== VOLUNTEERS SECTION ====== -->
+        <section class="content-section" id="section-volunteers">
+            <div class="section-header">
+                <h2>Volunteer Management</h2>
+                <button class="btn btn-primary" onclick="openModal('addVolunteerModal')"><i class="fas fa-plus"></i> Add Volunteer</button>
+            </div>
+            <div class="vol-stats">
+                <div class="vol-stat-card">
+                    <i class="fas fa-users" style="color: #4f46e5;"></i>
+                    <h3>156</h3>
+                    <p>Active Volunteers</p>
+                </div>
+                <div class="vol-stat-card">
+                    <i class="fas fa-clock" style="color: #d97706;"></i>
+                    <h3>4,230</h3>
+                    <p>Total Hours</p>
+                </div>
+                <div class="vol-stat-card">
+                    <i class="fas fa-calendar-check" style="color: #16a34a;"></i>
+                    <h3>48</h3>
+                    <p>Events Covered</p>
+                </div>
+                <div class="vol-stat-card">
+                    <i class="fas fa-star" style="color: #db2777;"></i>
+                    <h3>4.8</h3>
+                    <p>Avg. Rating</p>
+                </div>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search volunteers..." id="volunteerSearch">
+                    </div>
+                </div>
+                <table class="data-table" id="volunteerTable">
+                    <thead>
+                        <tr>
+                            <th>Volunteer</th>
+                            <th>Email</th>
+                            <th>Skills</th>
+                            <th>Hours</th>
+                            <th>Joined</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="donor-cell">
+                                    <img src="https://ui-avatars.com/api/?name=Anna+Brown&background=4f46e5&color=fff" alt="">
+                                    <span>Anna Brown</span>
+                                </div>
+                            </td>
+                            <td>anna.b@email.com</td>
+                            <td><span class="skill-tag">Teaching</span> <span class="skill-tag">First Aid</span></td>
+                            <td>120</td>
+                            <td>Jan 2024</td>
+                            <td><span class="badge-pill completed">Active</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="donor-cell">
+                                    <img src="https://ui-avatars.com/api/?name=Tom+Harris&background=16a34a&color=fff" alt="">
+                                    <span>Tom Harris</span>
+                                </div>
+                            </td>
+                            <td>tom.h@email.com</td>
+                            <td><span class="skill-tag">Construction</span> <span class="skill-tag">Driving</span></td>
+                            <td>85</td>
+                            <td>Mar 2024</td>
+                            <td><span class="badge-pill completed">Active</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="donor-cell">
+                                    <img src="https://ui-avatars.com/api/?name=Mia+Davis&background=d97706&color=fff" alt="">
+                                    <span>Mia Davis</span>
+                                </div>
+                            </td>
+                            <td>mia.d@email.com</td>
+                            <td><span class="skill-tag">Cooking</span> <span class="skill-tag">Organization</span></td>
+                            <td>200</td>
+                            <td>Sep 2023</td>
+                            <td><span class="badge-pill completed">Active</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="donor-cell">
+                                    <img src="https://ui-avatars.com/api/?name=Ryan+Miller&background=db2777&color=fff" alt="">
+                                    <span>Ryan Miller</span>
+                                </div>
+                            </td>
+                            <td>ryan.m@email.com</td>
+                            <td><span class="skill-tag">Medical</span> <span class="skill-tag">Logistics</span></td>
+                            <td>150</td>
+                            <td>Jun 2023</td>
+                            <td><span class="badge-pill pending">On Leave</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ====== GALLERY SECTION ====== -->
+        <section class="content-section" id="section-gallery">
+            <div class="section-header">
+                <h2>Photo Gallery</h2>
+                <button class="btn btn-primary" onclick="openModal('addPhotoModal')"><i class="fas fa-upload"></i> Upload Photo</button>
+            </div>
+            <div class="gallery-filter">
+                <button class="filter-pill active" data-gfilter="all">All</button>
+                <button class="filter-pill" data-gfilter="events">Events</button>
+                <button class="filter-pill" data-gfilter="programs">Programs</button>
+                <button class="filter-pill" data-gfilter="volunteers">Volunteers</button>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item" data-gcat="events">
+                    <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=300&fit=crop" alt="Gallery">
+                    <div class="gallery-overlay">
+                        <h4>Community Outreach</h4>
+                        <p>Dec 2025</p>
+                        <button class="icon-btn-sm"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gcat="programs">
+                    <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=400&h=300&fit=crop" alt="Gallery">
+                    <div class="gallery-overlay">
+                        <h4>School Construction</h4>
+                        <p>Nov 2025</p>
+                        <button class="icon-btn-sm"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gcat="events">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" alt="Gallery">
+                    <div class="gallery-overlay">
+                        <h4>Beach Cleanup</h4>
+                        <p>Oct 2025</p>
+                        <button class="icon-btn-sm"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gcat="volunteers">
+                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400&h=300&fit=crop" alt="Gallery">
+                    <div class="gallery-overlay">
+                        <h4>Volunteer Meetup</h4>
+                        <p>Sep 2025</p>
+                        <button class="icon-btn-sm"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gcat="programs">
+                    <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop" alt="Gallery">
+                    <div class="gallery-overlay">
+                        <h4>Health Camp</h4>
+                        <p>Aug 2025</p>
+                        <button class="icon-btn-sm"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gcat="events">
+                    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=300&fit=crop" alt="Gallery">
+                    <div class="gallery-overlay">
+                        <h4>Charity Gala 2025</h4>
+                        <p>Jul 2025</p>
+                        <button class="icon-btn-sm"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gcat="volunteers">
+                    <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=400&h=300&fit=crop" alt="Gallery">
+                    <div class="gallery-overlay">
+                        <h4>Team Building</h4>
+                        <p>Jun 2025</p>
+                        <button class="icon-btn-sm"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gcat="programs">
+                    <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=300&fit=crop" alt="Gallery">
+                    <div class="gallery-overlay">
+                        <h4>Tree Planting</h4>
+                        <p>May 2025</p>
+                        <button class="icon-btn-sm"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gcat="events">
+                    <img src="https://images.unsplash.com/photo-1593113630400-ea4288922497?w=400&h=300&fit=crop" alt="Gallery">
+                    <div class="gallery-overlay">
+                        <h4>Food Distribution</h4>
+                        <p>Apr 2025</p>
+                        <button class="icon-btn-sm"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== SETTINGS SECTION ====== -->
+        <section class="content-section" id="section-settings">
+            <h2 class="section-title">Settings</h2>
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3><i class="fas fa-user-cog"></i> Profile Settings</h3>
+                    <div class="form-group">
+                        <label>Organization Name</label>
+                        <input type="text" value="HopeRise Foundation">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" value="admin@hoperise.org">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" value="+1 (555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea rows="2">123 Hope Street, Suite 100, New York, NY 10001</textarea>
+                    </div>
+                    <button class="btn btn-primary">Save Changes</button>
+                </div>
+                <div class="settings-card">
+                    <h3><i class="fas fa-bell"></i> Notification Preferences</h3>
+                    <div class="setting-toggle">
+                        <div>
+                            <strong>Email Notifications</strong>
+                            <p>Receive email for new donations and registrations</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-toggle">
+                        <div>
+                            <strong>Event Reminders</strong>
+                            <p>Get reminded about upcoming events</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-toggle">
+                        <div>
+                            <strong>Weekly Reports</strong>
+                            <p>Receive weekly activity summary</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-toggle">
+                        <div>
+                            <strong>Donation Alerts</strong>
+                            <p>Real-time alerts for donations over ₹1000</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ====== MODALS ====== -->
+
+    <!-- Add Donor Modal -->
+    <div class="modal-overlay" id="addDonorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add New Donor</h3>
+                <button class="modal-close" onclick="closeModal('addDonorModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="addDonorForm">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" id="donorFirstName" placeholder="Enter first name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" id="donorLastName" placeholder="Enter last name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="tel" id="donorPhone" placeholder="+91 98765 43210" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Donation Amount (₹)</label>
+                            <input type="number" id="donorAmount" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Donation Type</label>
+                            <select id="donorType" required>
+                                <option value="">Select type</option>
+                                <option>One-Time</option>
+                                <option>Recurring</option>
+                                <option>Major</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Program</label>
+                        <select id="donorProgram" required>
+                            <option value="">Select program</option>
+                            <option>Education Initiative</option>
+                            <option>Healthcare Program</option>
+                            <option>Clean Water Project</option>
+                            <option>General Fund</option>
+                            <option>Disaster Relief</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="donorStatus">
+                            <option>Completed</option>
+                            <option>Pending</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="donorNotes" rows="3" placeholder="Additional notes..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addDonorModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="donorSubmitBtn">Add Donor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Donor Modal -->
+    <div class="modal-overlay" id="viewDonorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user"></i> Donor Details</h3>
+                <button class="modal-close" onclick="closeModal('viewDonorModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="view-donor-head">
+                    <img id="viewDonorAvatar" src="" alt="">
+                    <div>
+                        <h4 id="viewDonorName"></h4>
+                        <span id="viewDonorMobile"></span>
+                    </div>
+                    <span class="badge-pill" id="viewDonorType"></span>
+                </div>
+                <div class="view-donor-details">
+                    <div class="detail-row">
+                        <span>Donation Amount</span>
+                        <strong id="viewDonorAmount"></strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Program</span>
+                        <strong id="viewDonorProgram"></strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Date</span>
+                        <strong id="viewDonorDate"></strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Status</span>
+                        <strong id="viewDonorStatus"></strong>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <p class="view-donor-notes" id="viewDonorNotes">No notes available.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="viewDonorEditBtn"><i class="fas fa-pen"></i> Edit Donor</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('viewDonorModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div class="modal-overlay" id="addEventModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Create New Event</h3>
+                <button class="modal-close" onclick="closeModal('addEventModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="addEventForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Event Name</label>
+                        <input type="text" placeholder="Enter event name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Time</label>
+                            <input type="time" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" placeholder="Enter event location" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea rows="3" placeholder="Describe the event..." required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Max Attendees</label>
+                            <input type="number" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Budget (₹)</label>
+                            <input type="number" placeholder="0.00">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addEventModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Program Modal -->
+    <div class="modal-overlay" id="addProgramModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add New Program</h3>
+                <button class="modal-close" onclick="closeModal('addProgramModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="addProgramForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Program Name</label>
+                        <input type="text" placeholder="Enter program name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select required>
+                            <option value="">Select category</option>
+                            <option value="education">Education</option>
+                            <option value="health">Healthcare</option>
+                            <option value="environment">Environment</option>
+                            <option value="community">Community</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea rows="3" placeholder="Describe the program..." required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Target Countries</label>
+                            <input type="text" placeholder="e.g., Kenya, India">
+                        </div>
+                        <div class="form-group">
+                            <label>Budget (₹)</label>
+                            <input type="number" placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Goal</label>
+                        <textarea rows="2" placeholder="What is the main goal of this program?"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addProgramModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Program</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Team Modal -->
+    <div class="modal-overlay" id="addTeamModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Team Member</h3>
+                <button class="modal-close" onclick="closeModal('addTeamModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="addTeamForm">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Enter full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" placeholder="e.g., Program Manager" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <textarea rows="3" placeholder="Brief bio..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>LinkedIn Profile</label>
+                        <input type="url" placeholder="https://linkedin.com/in/...">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addTeamModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Volunteer Modal -->
+    <div class="modal-overlay" id="addVolunteerModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add New Volunteer</h3>
+                <button class="modal-close" onclick="closeModal('addVolunteerModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="addVolunteerForm">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Enter full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" placeholder="Enter email" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" placeholder="Enter phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>Skills</label>
+                        <input type="text" placeholder="e.g., Teaching, Medical, Construction">
+                    </div>
+                    <div class="form-group">
+                        <label>Availability</label>
+                        <select required>
+                            <option value="">Select availability</option>
+                            <option>Weekdays</option>
+                            <option>Weekends</option>
+                            <option>Flexible</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addVolunteerModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Volunteer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload Photo Modal -->
+    <div class="modal-overlay" id="addPhotoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Upload Photo</h3>
+                <button class="modal-close" onclick="closeModal('addPhotoModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="addPhotoForm">
+                <div class="modal-body">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h4>Drag & Drop or Click to Upload</h4>
+                        <p>Supports JPG, PNG, GIF up to 10MB</p>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" placeholder="Photo title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select required>
+                            <option value="">Select category</option>
+                            <option>Events</option>
+                            <option>Programs</option>
+                            <option>Volunteers</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addPhotoModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

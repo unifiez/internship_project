@@ -6,17 +6,19 @@ A college internship project: a complete NGO web solution consisting of a **logi
 
 ```
 ngo/
-├── index.html          # Admin dashboard (NGO management system)
-├── styles.css          # Shared styles for the admin dashboard
-├── app.js              # Dashboard logic (modals, filters, navigation, auth guard, donor CRUD)
-├── login.html          # Login / Signup / Admin authentication page
-├── login.css           # Login page styles (matches website theme)
-├── login.js            # Auth logic (localStorage users, sessions, validation)
-├── README.md
-└── user/               # Public-facing NGO website
-    ├── index.html      # Public website (Home, Programs, Donate, Volunteer, etc.)
-    ├── styles.css      # Public website styles
-    └── app.js          # Public site logic (donation form, carousel, toasts, auth guard)
+├── index.html          # Public NGO website (Home, Programs, Donate, Volunteer, etc.)
+├── styles.css          # Public website styles
+├── app.js              # Public site logic (donation form, carousel, toasts, login gates)
+├── _redirects          # Netlify URL redirects
+├── admin/              # Admin dashboard (NGO management system)
+│   ├── index.html      # Dashboard (stats, fund allocation, donors, events, team, etc.)
+│   ├── styles.css      # Dashboard styles
+│   └── app.js          # Dashboard logic (modals, filters, navigation, auth guard, donor CRUD)
+├── login/              # Login / Signup / Admin authentication page
+│   ├── login.html      # Authentication page (matches website theme)
+│   ├── login.css       # Login page styles
+│   └── login.js        # Auth logic (localStorage users, sessions, validation)
+└── README.md
 ```
 
 ## Authentication System
@@ -25,8 +27,8 @@ The project has a **role-based frontend authentication system** (no backend):
 
 | Role   | Login Page | Redirects To        |
 |--------|------------|---------------------|
-| User   | `login.html` (Login / Sign Up tabs) | `user/index.html` |
-| Admin  | `login.html` (Admin tab) | `index.html` (dashboard) |
+| User   | `login/login.html` (Login / Sign Up tabs) | `/` (public website) |
+| Admin  | `login/login.html` (Admin tab) | `admin/index.html` (dashboard) |
 
 ### Admin Credentials (built-in / hardcoded)
 ```
@@ -40,11 +42,11 @@ Password: admin123
 - **Admin Login** – checks against the built-in admin credentials and redirects to the dashboard
 - **Unauthorized access** – if a regular user tries to log in through the Admin tab (or visits the dashboard directly), they get an **"Unauthorized! Admin access only"** banner and are blocked
 - **Logout** – clears the session and returns to the login page
-- Pages are protected client-side: visiting the dashboard or website without a session redirects to `login.html`
+- The public website is open to all; the admin dashboard is protected client-side (visiting it without a session redirects to `login/`)
 
 ## Features
 
-### Admin Dashboard (`index.html`)
+### Admin Dashboard (`admin/`)
 - **Dashboard** – key stats (donations, beneficiaries, active programs, volunteers), **fund allocation progress card**, recent donations, and upcoming events
 - **Programs** – program cards with category filters (Education, Healthcare, Environment, Community) and progress tracking
 - **Donors** – full donor management with search, filters, selection, pagination, CSV export, and **working View / Edit / Delete / Add actions**:
@@ -60,7 +62,7 @@ Password: admin123
 - All amounts displayed in **Indian Rupee (₹) format** with Indian number grouping (e.g., ₹2,48,500)
 - Indian donor data (+91 mobiles, Indian names)
 
-### Public Website (`user/`)
+### Public Website (root `/`)
 - Hero section with impact stats
 - About, Programs showcase, Impact counters (animated, ₹ format)
 - Events carousel, success stories
@@ -68,8 +70,9 @@ Password: admin123
 - Volunteer signup form, contact form, newsletter signup
 - Partners strip, CTA banner, footer
 - Shows the logged-in user's name/avatar with a logout option in the navbar (desktop & mobile)
+- Public — no login required to browse; login is only needed for donations and volunteer signup
 
-### Login Page (`login.html`)
+### Login Page (`login/`)
 - Tabbed interface: **Login** (user), **Sign Up**, **Admin**
 - Styled to match the HopeRise website theme (same colors, fonts, buttons, and design tokens)
 - Indian mobile number validation (10 digits, starting with 6–9, formatted as `+91 XXXXX XXXXX`)
@@ -92,7 +95,7 @@ Password: admin123
 
 ## Getting Started
 
-No build tools or dependencies to install. Serve the project from a local HTTP server (required so the `user/` folder resolves correctly):
+No build tools or dependencies to install. Serve the project from a local HTTP server:
 
 ```bash
 python -m http.server 8080
@@ -102,28 +105,29 @@ Then open:
 
 ```bash
 # Public website (open to everyone, no login required)
-http://localhost:8080/user/
+http://localhost:8080/
 
 # Login page (needed for donations, volunteer signup, and admin access)
-http://localhost:8080/login.html
+http://localhost:8080/login/login.html
 
 # Admin dashboard (direct access redirects to login)
-http://localhost:8080/index.html
+http://localhost:8080/admin/
 ```
 
 ## Deployment (Netlify)
 
-This project is deployed on Netlify and includes a `_redirects` file at the root so the site's base URL opens the **public NGO website** instead of the admin panel/login:
+This project is deployed on Netlify. The root `index.html` IS the public NGO website, so the base URL opens the website directly:
+
+- **`/`** → public NGO website — no login required
+- **`/admin/`** → admin dashboard (login required)
+- **`/login/`** → login / signup / admin authentication page
+
+The `_redirects` file handles clean URLs:
 
 ```
-/  /user/index.html  200
+/login  /login/login.html  200
+/login/  /login/login.html  200
 ```
-
-- **`/`** → serves the public website (`user/index.html`) — no login required
-- **`/index.html`** → admin dashboard (login required)
-- **`/login.html`** → login / signup / admin authentication page
-
-The public site uses a `<base href="/user/">` tag so its relative CSS/JS paths resolve correctly when served from the root URL.
 
 ## Notes
 

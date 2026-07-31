@@ -91,9 +91,9 @@ function checkExistingSession() {
     if (!session) return;
 
     if (session.role === 'admin') {
-        window.location.href = 'index.html';
+        window.location.href = '../admin/index.html';
     } else if (session.role === 'user') {
-        window.location.href = 'user/index.html';
+        window.location.href = '../index.html';
     }
 }
 
@@ -199,7 +199,7 @@ function handleUserLogin(e) {
     setTimeout(() => {
         const returnUrl = localStorage.getItem('hoperise_return_url');
         localStorage.removeItem('hoperise_return_url');
-        window.location.href = returnUrl || 'user/index.html';
+        window.location.href = returnUrl || '../index.html';
     }, 800);
 }
 
@@ -265,7 +265,7 @@ function handleSignup(e) {
     setTimeout(() => {
         const returnUrl = localStorage.getItem('hoperise_return_url');
         localStorage.removeItem('hoperise_return_url');
-        window.location.href = returnUrl || 'user/index.html';
+        window.location.href = returnUrl || '../index.html';
     }, 800);
 }
 
@@ -286,7 +286,7 @@ function handleAdminLogin(e) {
         setSession(session);
         showToast('Admin login successful!', 'success');
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = '../admin/index.html';
         }, 800);
         return;
     }
