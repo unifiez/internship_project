@@ -10,155 +10,159 @@
 </head>
 <body>
 
-    <div class="login-wrapper">
-        <div class="login-brand">
-            <i class="fas fa-hands-holding-heart"></i>
-            <span>HopeRise</span>
-        </div>
+    <div class="login-page">
 
-        <!-- ====== ERROR BANNER (unauthorized) ====== -->
-        <div class="auth-banner" id="authBanner" style="display:none;">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span id="authBannerMsg">Unauthorized access!</span>
-        </div>
+        <!-- ====== BRAND / HEADER ====== -->
+        <header class="login-header">
+            <div class="login-brand">
+                <i class="fas fa-hands-holding-heart"></i>
+                <span>HopeRise</span>
+            </div>
+        </header>
 
-        <div class="login-card">
-            <!-- ====== TABS ====== -->
-            <div class="auth-tabs">
-                <button class="auth-tab active" data-tab="login">Login</button>
-                <button class="auth-tab" data-tab="signup">Sign Up</button>
-                <button class="auth-tab" data-tab="admin">Admin</button>
+        <div class="login-body">
+
+            <!-- ====== ERROR BANNER (unauthorized) ====== -->
+            <div class="auth-banner" id="authBanner" style="display:none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="authBannerMsg">Unauthorized access!</span>
             </div>
 
-            <!-- ====== USER LOGIN ====== -->
-            <form class="auth-form active" id="loginForm">
-                <h2 class="auth-title">Welcome Back</h2>
-                <p class="auth-sub">Sign in to access the NGO portal</p>
+            <div class="login-card">
+                <div class="card-head">
+                    <span class="section-badge" id="cardBadge">Member Access</span>
+                    <h1 class="card-title" id="cardTitle">Welcome <span class="text-gradient">Back</span></h1>
+                    <p class="card-sub" id="cardSub">Sign in to continue to the NGO portal</p>
+                </div>
 
-                <div class="form-group">
-                    <label>Email</label>
-                    <div class="input-wrap">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                <!-- ====== TABS ====== -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Login</button>
+                    <button class="auth-tab" data-tab="signup">Sign Up</button>
+                    <button class="auth-tab" data-tab="admin">Admin</button>
+                </div>
+
+                <!-- ====== USER LOGIN ====== -->
+                <form class="auth-form active" id="loginForm">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label>Password</label>
-                    <div class="input-wrap">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
-                        <button type="button" class="toggle-pass" data-target="loginPassword"><i class="fas fa-eye"></i></button>
-                    </div>
-                </div>
-
-                <div class="form-row-between">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="rememberMe"> Remember me
-                    </label>
-                    <a href="#" class="link" id="forgotLink">Forgot password?</a>
-                </div>
-
-                <button type="submit" class="btn-login">
-                    <i class="fas fa-sign-in-alt"></i> Login as User
-                </button>
-                <p class="auth-switch">Don't have an account? <a href="#" class="link" data-goto="signup">Create one</a></p>
-            </form>
-
-            <!-- ====== SIGN UP ====== -->
-            <form class="auth-form" id="signupForm">
-                <h2 class="auth-title">Create Account</h2>
-                <p class="auth-sub">Register to become a HopeRise user</p>
-
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <div class="input-wrap">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="signupName" placeholder="e.g. Rahul Sharma" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Email</label>
-                    <div class="input-wrap">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="signupEmail" placeholder="you@example.com" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Mobile Number</label>
-                    <div class="input-wrap">
-                        <i class="fas fa-phone"></i>
-                        <input type="tel" id="signupMobile" placeholder="+91 98765 43210" required>
-                        <small class="field-hint">Indian format: 10 digits starting with 6-9</small>
-                    </div>
-                </div>
-
-                <div class="form-row">
                     <div class="form-group">
                         <label>Password</label>
                         <div class="input-wrap">
                             <i class="fas fa-lock"></i>
-                            <input type="password" id="signupPassword" placeholder="Min 6 characters" required>
-                            <button type="button" class="toggle-pass" data-target="signupPassword"><i class="fas fa-eye"></i></button>
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                            <button type="button" class="toggle-pass" data-target="loginPassword"><i class="fas fa-eye"></i></button>
                         </div>
                     </div>
+
+                    <div class="form-row-between">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe"> Remember me
+                        </label>
+                        <a href="#" class="link" id="forgotLink">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-sign-in-alt"></i> Login as User
+                    </button>
+                    <p class="auth-switch">Don't have an account? <a href="#" class="link" data-goto="signup">Create one</a></p>
+                </form>
+
+                <!-- ====== SIGN UP ====== -->
+                <form class="auth-form" id="signupForm">
                     <div class="form-group">
-                        <label>Confirm</label>
+                        <label>Full Name</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="signupName" placeholder="e.g. Rahul Sharma" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="signupMobile" placeholder="+91 98765 43210" required>
+                            <small class="field-hint">Indian format: 10 digits starting with 6-9</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signupPassword" placeholder="Min 6 characters" required>
+                                <button type="button" class="toggle-pass" data-target="signupPassword"><i class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signupConfirm" placeholder="Re-enter password" required>
+                                <button type="button" class="toggle-pass" data-target="signupConfirm"><i class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                    <p class="auth-switch">Already have an account? <a href="#" class="link" data-goto="login">Login</a></p>
+                </form>
+
+                <!-- ====== ADMIN LOGIN ====== -->
+                <form class="auth-form" id="adminForm">
+                    <div class="admin-note">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <strong>Default Admin Credentials</strong>
+                            <span>Email: admin@hoperise.org</span>
+                            <span>Password: admin123</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Admin Email</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="adminEmail" placeholder="admin@hoperise.org" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Admin Password</label>
                         <div class="input-wrap">
                             <i class="fas fa-lock"></i>
-                            <input type="password" id="signupConfirm" placeholder="Re-enter password" required>
-                            <button type="button" class="toggle-pass" data-target="signupConfirm"><i class="fas fa-eye"></i></button>
+                            <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+                            <button type="button" class="toggle-pass" data-target="adminPassword"><i class="fas fa-eye"></i></button>
                         </div>
                     </div>
-                </div>
 
-                <button type="submit" class="btn-login">
-                    <i class="fas fa-user-plus"></i> Create Account
-                </button>
-                <p class="auth-switch">Already have an account? <a href="#" class="link" data-goto="login">Login</a></p>
-            </form>
+                    <button type="submit" class="btn btn-donate btn-full">
+                        <i class="fas fa-user-shield"></i> Login to Dashboard
+                    </button>
+                    <p class="auth-switch">Are you a regular user? <a href="#" class="link" data-goto="login">Login as User</a></p>
+                </form>
+            </div>
 
-            <!-- ====== ADMIN LOGIN ====== -->
-            <form class="auth-form" id="adminForm">
-                <h2 class="auth-title">Admin Portal</h2>
-                <p class="auth-sub">Restricted area — NGO administrators only</p>
-
-                <div class="admin-note">
-                    <i class="fas fa-shield-alt"></i>
-                    <div>
-                        <strong>Default Admin Credentials</strong>
-                        <span>Email: admin@hoperise.org</span>
-                        <span>Password: admin123</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Admin Email</label>
-                    <div class="input-wrap">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="adminEmail" placeholder="admin@hoperise.org" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Admin Password</label>
-                    <div class="input-wrap">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="adminPassword" placeholder="Enter admin password" required>
-                        <button type="button" class="toggle-pass" data-target="adminPassword"><i class="fas fa-eye"></i></button>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-login btn-admin">
-                    <i class="fas fa-user-shield"></i> Login to Dashboard
-                </button>
-                <p class="auth-switch">Are you a regular user? <a href="#" class="link" data-goto="login">Login as User</a></p>
-            </form>
+            <p class="login-footer">&copy; 2026 HopeRise Foundation. All rights reserved.</p>
         </div>
-
-        <p class="login-footer">&copy; 2026 HopeRise Foundation. All rights reserved.</p>
     </div>
 
     <div class="toast-container" id="toastContainer"></div>

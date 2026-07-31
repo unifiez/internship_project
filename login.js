@@ -129,6 +129,17 @@ function switchTab(tabName) {
     const formIds = { login: 'loginForm', signup: 'signupForm', admin: 'adminForm' };
     document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
     document.getElementById(formIds[tabName]).classList.add('active');
+
+    const head = {
+        login: { badge: 'Member Access', title: 'Welcome <span class="text-gradient">Back</span>', sub: 'Sign in to continue to the NGO portal' },
+        signup: { badge: 'Join Us', title: 'Create <span class="text-gradient">Account</span>', sub: 'Register to become a HopeRise user' },
+        admin: { badge: 'Admin Portal', title: 'Admin <span class="text-gradient">Access</span>', sub: 'Restricted area — NGO administrators only' }
+    };
+
+    const cfg = head[tabName];
+    document.getElementById('cardBadge').textContent = cfg.badge;
+    document.getElementById('cardTitle').innerHTML = cfg.title;
+    document.getElementById('cardSub').textContent = cfg.sub;
 }
 
 function initPasswordToggles() {
