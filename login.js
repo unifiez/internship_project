@@ -78,6 +78,11 @@ function handleQueryParams() {
         showBanner('You have been logged out successfully.', true);
     } else if (params.get('role') === 'admin') {
         switchTab('admin');
+    } else if (params.get('required')) {
+        const hint = localStorage.getItem('hoperise_login_hint');
+        showBanner(hint || 'Please login to continue', true);
+        localStorage.removeItem('hoperise_login_hint');
+        switchTab('login');
     }
 }
 
@@ -192,7 +197,9 @@ function handleUserLogin(e) {
     }
     showToast(`Welcome back, ${user.name}!`, 'success');
     setTimeout(() => {
-        window.location.href = 'user/index.html';
+        const returnUrl = localStorage.getItem('hoperise_return_url');
+        localStorage.removeItem('hoperise_return_url');
+        window.location.href = returnUrl || 'user/index.html';
     }, 800);
 }
 
@@ -256,7 +263,9 @@ function handleSignup(e) {
 
     showToast('Account created successfully! Welcome, ' + name + '!', 'success');
     setTimeout(() => {
-        window.location.href = 'user/index.html';
+        const returnUrl = localStorage.getItem('hoperise_return_url');
+        localStorage.removeItem('hoperise_return_url');
+        window.location.href = returnUrl || 'user/index.html';
     }, 800);
 }
 

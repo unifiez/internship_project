@@ -8,22 +8,25 @@ function getSession() {
     }
 }
 
-function requireUser() {
+function requireUserLogin(message) {
     const session = getSession();
+    if (session && session.role) return session;
 
-    if (!session || !session.role) {
-        window.location.href = '../login.html?role=user';
-        return null;
-    }
-
-    return session;
+    localStorage.setItem('hoperise_login_hint', message || 'Please login to continue');
+    localStorage.setItem('hoperise_return_url', window.location.href);
+    window.location.href = '../login.html?role=user&required=1';
+    return null;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const session = requireUser();
-    if (!session) return;
+    const session = getSession();
 
-    initUserSession(session);
+    if (session && session.role) {
+        initUserSession(session);
+    } else {
+        initLoginButtons();
+    }
+
     initNavbar();
     initMobileMenu();
     initSmoothScroll();
@@ -34,6 +37,27 @@ document.addEventListener('DOMContentLoaded', () => {
     initBackToTop();
     initCounters();
 });
+
+/* ========== LOGIN BUTTONS (when logged out) ========== */
+function initLoginButtons() {
+    const actions = document.getElementById('navActions');
+    if (actions) {
+        const loginBtn = document.createElement('a');
+        loginBtn.href = '../login.html?role=user';
+        loginBtn.className = 'btn btn-outline btn-nav';
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        actions.appendChild(loginBtn);
+    }
+
+    const mobileActions = document.querySelector('.nav-mobile-actions');
+    if (mobileActions) {
+        const mobileLogin = document.createElement('a');
+        mobileLogin.href = '../login.html?role=user';
+        mobileLogin.className = 'btn btn-outline btn-nav';
+        mobileLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        mobileActions.appendChild(mobileLogin);
+    }
+}
 
 /* ========== USER SESSION ========== */
 function initUserSession(session) {
@@ -276,6 +300,10 @@ function initDonation() {
             showToast('Please select or enter a donation amount', 'error');
             return;
         }
+
+        const session = requireUserLogin('Please login to make a donation');
+        if (!session) return;
+
         showToast(`Thank you for your generous donation of ${formatINR(selectedAmount)}!`, 'success');
     });
 }
@@ -286,6 +314,10 @@ function initForms() {
     if (volunteerForm) {
         volunteerForm.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            const session = requireUserLogin('Please login to register as a volunteer');
+            if (!session) return;
+
             showToast('Thank you for signing up! We\'ll be in touch soon.', 'success');
             volunteerForm.reset();
         });
