@@ -1,4 +1,29 @@
+const SESSION_KEY = 'hoperise_session';
+
+function getSession() {
+    try {
+        return JSON.parse(localStorage.getItem(SESSION_KEY)) || JSON.parse(sessionStorage.getItem(SESSION_KEY)) || null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function requireUser() {
+    const session = getSession();
+
+    if (!session || !session.role) {
+        window.location.href = '../login.html?role=user';
+        return null;
+    }
+
+    return session;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    const session = requireUser();
+    if (!session) return;
+
+    initUserSession(session);
     initNavbar();
     initMobileMenu();
     initSmoothScroll();
@@ -9,6 +34,43 @@ document.addEventListener('DOMContentLoaded', () => {
     initBackToTop();
     initCounters();
 });
+
+/* ========== USER SESSION ========== */
+function initUserSession(session) {
+    const actions = document.getElementById('navActions');
+    if (!actions) return;
+
+    const logoutBtn = document.createElement('a');
+    logoutBtn.href = '#';
+    logoutBtn.className = 'nav-user-chip';
+    logoutBtn.innerHTML = `
+        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(session.name || 'User')}&background=4f46e5&color=fff&size=32" alt="">
+        <span>${session.name || 'User'}</span>
+        <i class="fas fa-sign-out-alt" title="Logout"></i>
+    `;
+
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem(SESSION_KEY);
+        sessionStorage.removeItem(SESSION_KEY);
+        window.location.href = '../login.html?logout=1';
+    });
+
+    actions.appendChild(logoutBtn);
+
+    const mobileActions = document.querySelector('.nav-mobile-actions');
+    if (mobileActions) {
+        const mobileLogout = logoutBtn.cloneNode(true);
+        mobileLogout.classList.add('btn-logout-mobile');
+        mobileLogout.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem(SESSION_KEY);
+            sessionStorage.removeItem(SESSION_KEY);
+            window.location.href = '../login.html?logout=1';
+        });
+        mobileActions.appendChild(mobileLogout);
+    }
+}
 
 /* ========== NAVBAR ========== */
 function initNavbar() {
@@ -168,6 +230,11 @@ function initCarousel() {
     });
 }
 
+/* ========== INDIAN FORMATTING ========== */
+function formatINR(value) {
+    return '₹' + Number(value).toLocaleString('en-IN');
+}
+
 /* ========== DONATION ========== */
 function initDonation() {
     const amountBtns = document.querySelectorAll('.amount-btn');
@@ -184,7 +251,7 @@ function initDonation() {
             btn.classList.add('active');
             const freq = btn.dataset.freq;
             const label = freq === 'one-time' ? '' : '/' + freq.replace('ly', '');
-            donateAmountDisplay.textContent = '$' + selectedAmount.toLocaleString() + label;
+            donateAmountDisplay.textContent = formatINR(selectedAmount) + label;
         });
     });
 
@@ -194,14 +261,14 @@ function initDonation() {
             btn.classList.add('active');
             selectedAmount = parseInt(btn.dataset.amount);
             customInput.value = '';
-            donateAmountDisplay.textContent = '$' + selectedAmount.toLocaleString();
+            donateAmountDisplay.textContent = formatINR(selectedAmount);
         });
     });
 
     customInput.addEventListener('input', () => {
         amountBtns.forEach(b => b.classList.remove('active'));
         selectedAmount = parseInt(customInput.value) || 0;
-        donateAmountDisplay.textContent = selectedAmount > 0 ? '$' + selectedAmount.toLocaleString() : '$0';
+        donateAmountDisplay.textContent = selectedAmount > 0 ? formatINR(selectedAmount) : formatINR(0);
     });
 
     donateBtn.addEventListener('click', () => {
@@ -209,7 +276,7 @@ function initDonation() {
             showToast('Please select or enter a donation amount', 'error');
             return;
         }
-        showToast(`Thank you for your generous donation of $${selectedAmount.toLocaleString()}!`, 'success');
+        showToast(`Thank you for your generous donation of ${formatINR(selectedAmount)}!`, 'success');
     });
 }
 
@@ -280,6 +347,7 @@ function initCounters() {
 
 function animateCounter(el) {
     const target = parseInt(el.dataset.target);
+    const isCurrency = el.dataset.currency === 'true';
     const duration = 2000;
     const start = performance.now();
 
@@ -289,8 +357,10 @@ function animateCounter(el) {
         const eased = 1 - Math.pow(1 - progress, 3);
         const current = Math.floor(eased * target);
 
-        if (target >= 1000000) {
-            el.textContent = '$' + (current / 1000000).toFixed(1) + 'M+';
+        if (isCurrency) {
+            el.textContent = '₹' + current.toLocaleString('en-IN') + '+';
+        } else if (target >= 1000000) {
+            el.textContent = (current / 1000000).toFixed(1) + 'M+';
         } else if (target >= 1000) {
             el.textContent = (current / 1000).toFixed(0) + 'K+';
         } else {

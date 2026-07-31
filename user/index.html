@@ -30,7 +30,7 @@
                     <a href="#donate" class="btn btn-donate btn-nav"><i class="fas fa-heart"></i> Donate Now</a>
                 </li>
             </ul>
-            <div class="nav-actions">
+            <div class="nav-actions" id="navActions">
                 <a href="#volunteer" class="btn btn-outline btn-nav">Volunteer</a>
                 <a href="#donate" class="btn btn-donate btn-nav">
                     <i class="fas fa-heart"></i> Donate Now
@@ -75,7 +75,7 @@
                 </div>
                 <div class="hero-stat-divider"></div>
                 <div class="hero-stat">
-                    <h3>$2M+</h3>
+                    <h3>₹2Cr+</h3>
                     <p>Funds Raised</p>
                 </div>
             </div>
@@ -291,8 +291,8 @@
                 </div>
                 <div class="impact-card">
                     <div class="impact-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                    <h3 class="counter" data-target="2000000">0</h3>
-                    <p>Funds Raised ($)</p>
+                    <h3 class="counter" data-target="2000000" data-currency="true">0</h3>
+                    <p>Funds Raised (₹)</p>
                 </div>
             </div>
         </div>
@@ -521,17 +521,17 @@
                         <button class="freq-btn" data-freq="yearly">Yearly</button>
                     </div>
                     <div class="amount-grid">
-                        <button class="amount-btn" data-amount="25">$25</button>
-                        <button class="amount-btn" data-amount="50">$50</button>
-                        <button class="amount-btn active" data-amount="100">$100</button>
-                        <button class="amount-btn" data-amount="250">$250</button>
-                        <button class="amount-btn" data-amount="500">$500</button>
-                        <button class="amount-btn" data-amount="1000">$1,000</button>
+                        <button class="amount-btn" data-amount="25">₹25</button>
+                        <button class="amount-btn" data-amount="50">₹50</button>
+                        <button class="amount-btn active" data-amount="100">₹100</button>
+                        <button class="amount-btn" data-amount="250">₹250</button>
+                        <button class="amount-btn" data-amount="500">₹500</button>
+                        <button class="amount-btn" data-amount="1000">₹1,000</button>
                     </div>
                     <div class="custom-amount">
                         <label>Or enter custom amount</label>
                         <div class="custom-amount-input">
-                            <span class="currency">$</span>
+                            <span class="currency">₹</span>
                             <input type="number" id="customAmount" placeholder="Enter amount" min="1">
                         </div>
                     </div>
@@ -560,7 +560,7 @@
                         <input type="email" placeholder="john@example.com">
                     </div>
                     <button class="btn btn-donate btn-full btn-lg" id="donateBtn">
-                        <i class="fas fa-heart"></i> Donate <span id="donateAmount">$100</span> Now
+                        <i class="fas fa-heart"></i> Donate <span id="donateAmount">₹100</span> Now
                     </button>
                     <p class="donate-note">By donating, you agree to our Terms of Service and Privacy Policy.</p>
                 </div>

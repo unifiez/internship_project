@@ -1,8 +1,38 @@
+const SESSION_KEY = 'hoperise_session';
+
+function getSession() {
+    try {
+        return JSON.parse(localStorage.getItem(SESSION_KEY)) || JSON.parse(sessionStorage.getItem(SESSION_KEY)) || null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function requireAdmin() {
+    const session = getSession();
+
+    if (!session) {
+        window.location.href = 'login.html?role=admin';
+        return null;
+    }
+
+    if (session.role !== 'admin') {
+        window.location.href = 'login.html?error=unauthorized';
+        return null;
+    }
+
+    return session;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    const session = requireAdmin();
+    if (!session) return;
+
+    initAdminProfile(session);
     initSidebar();
     initNavigation();
     initNotifications();
-    initUserDropdown();
+    initUserDropdown(session);
     initModals();
     initForms();
     initSearch();
@@ -11,6 +41,24 @@ document.addEventListener('DOMContentLoaded', () => {
     initUploadArea();
     initTableFeatures();
 });
+
+/* ========== ADMIN PROFILE ========== */
+function initAdminProfile(session) {
+    const profileImg = document.getElementById('userProfile').querySelector('img');
+    const profileName = document.getElementById('userProfile').querySelector('span');
+    const dropdownImg = document.getElementById('userDropdown').querySelector('.dropdown-header img');
+    const dropdownName = document.getElementById('userDropdown').querySelector('.dropdown-header strong');
+    const dropdownEmail = document.getElementById('userDropdown').querySelector('.dropdown-header span');
+
+    const displayName = session.name || 'Admin User';
+    const displayEmail = session.email || 'admin@hoperise.org';
+
+    profileImg.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(displayName) + '&background=4f46e5&color=fff';
+    profileName.textContent = displayName;
+    dropdownImg.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(displayName) + '&background=4f46e5&color=fff';
+    dropdownName.textContent = displayName;
+    dropdownEmail.textContent = displayEmail;
+}
 
 /* ========== SIDEBAR ========== */
 function initSidebar() {
@@ -114,7 +162,7 @@ function initNotifications() {
 }
 
 /* ========== USER DROPDOWN ========== */
-function initUserDropdown() {
+function initUserDropdown(session) {
     const userProfile = document.getElementById('userProfile');
     const userDropdown = document.getElementById('userDropdown');
 
@@ -141,10 +189,12 @@ function initUserDropdown() {
                 if (settingsLink) settingsLink.click();
             } else if (text === 'Logout') {
                 if (confirm('Are you sure you want to logout?')) {
-                    showToast('Logged out successfully', 'success');
+                    localStorage.removeItem(SESSION_KEY);
+                    sessionStorage.removeItem(SESSION_KEY);
+                    window.location.href = 'login.html?logout=1';
                 }
             } else if (text === 'My Profile') {
-                showToast('Profile page coming soon', 'info');
+                showToast('Admin: ' + (session ? session.email : 'admin@hoperise.org'), 'info');
             } else if (text === 'Help Center') {
                 showToast('Contact support at support@hoperise.org', 'info');
             }
@@ -244,6 +294,11 @@ function filterTable(tableId, query) {
     });
 }
 
+/* ========== INDIAN FORMATTING ========== */
+function formatINR(value) {
+    return '₹' + Number(value).toLocaleString('en-IN');
+}
+
 /* ========== CHARTS ========== */
 function initCharts() {
     initDonationChart();
@@ -312,7 +367,7 @@ function initDonationChart() {
                     displayColors: true,
                     callbacks: {
                         label: function(context) {
-                            return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                            return context.dataset.label + ': ' + formatINR(context.parsed.y);
                         }
                     }
                 }
@@ -328,7 +383,7 @@ function initDonationChart() {
                         font: { size: 12 },
                         color: '#94a3b8',
                         callback: function(value) {
-                            return '$' + (value / 1000) + 'K';
+                            return '₹' + (value / 1000) + 'K';
                         }
                     }
                 }
@@ -445,7 +500,7 @@ function initFilters() {
                     row.style.display = '';
                 } else {
                     const badge = row.querySelector('.badge-pill')?.textContent.toLowerCase();
-                    const isMajor = parseFloat(row.querySelector('.amount')?.textContent.replace(/[$,]/g, '')) >= 5000;
+                    const isMajor = parseFloat(row.querySelector('.amount')?.textContent.replace(/[₹$,]/g, '')) >= 5000;
                     if (type === 'major') {
                         row.style.display = isMajor ? '' : 'none';
                     } else {
