@@ -101,15 +101,29 @@ python -m http.server 8080
 Then open:
 
 ```bash
-# Login page (start here)
+# Public website (open to everyone, no login required)
+http://localhost:8080/user/
+
+# Login page (needed for donations, volunteer signup, and admin access)
 http://localhost:8080/login.html
 
 # Admin dashboard (direct access redirects to login)
 http://localhost:8080/index.html
-
-# Public website (direct access redirects to login)
-http://localhost:8080/user/
 ```
+
+## Deployment (Netlify)
+
+This project is deployed on Netlify and includes a `_redirects` file at the root so the site's base URL opens the **public NGO website** instead of the admin panel/login:
+
+```
+/  /user/index.html  200
+```
+
+- **`/`** → serves the public website (`user/index.html`) — no login required
+- **`/index.html`** → admin dashboard (login required)
+- **`/login.html`** → login / signup / admin authentication page
+
+The public site uses a `<base href="/user/">` tag so its relative CSS/JS paths resolve correctly when served from the root URL.
 
 ## Notes
 
